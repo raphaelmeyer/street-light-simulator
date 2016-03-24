@@ -1,1 +1,1 @@
-# street-light-simulator
+# street-light-simulatorThis is a streetlamp simulator.You can turn the street lamp on/off over the the local D-BUS.The application also outputs light values over the D-BUS.

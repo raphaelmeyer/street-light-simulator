@@ -1,3 +1,8 @@
 build*
 *~
 *.pro.user
+qrc_ressources.*
+qrc_qml.*
+Makefile
+*.o
+street-light-simulator

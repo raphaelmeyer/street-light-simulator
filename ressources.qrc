@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="strasse_nacht">assets/images/strasse_nacht.tif</file>
+        <file>assets/images/strasse_tag_licht.tif</file>
+        <file alias="strasse_tag">assets/images/strasse_tag.tif</file>
+        <file>assets/images/strasse_nacht_licht.tif</file>
+        <file>assets/images/auto.png</file>
+    </qresource>
+</RCC>

@@ -5,4 +5,6 @@ qrc_ressources.*
 qrc_qml.*
 Makefile
 *.o
+moc_*
 street-light-simulator
+street-light-simulator-test

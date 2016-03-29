@@ -28,4 +28,4 @@ after_success:
   - coveralls  -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"
 
 notifications:
-  slack: bbvch:ocreifaWRLNdYP5ip7797sAU
+  slack: bbvch:$SlackCi

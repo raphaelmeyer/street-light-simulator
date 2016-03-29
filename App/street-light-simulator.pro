@@ -12,6 +12,10 @@ QT += quick
 CONFIG += staticlib
 CONFIG += release qt debug
 CONFIG += c++14
+CONFIG += coverage
+
+QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0
 
 # Input
 SOURCES += main.cpp \ 

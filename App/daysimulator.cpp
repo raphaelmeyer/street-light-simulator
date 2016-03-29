@@ -6,7 +6,7 @@
 
 
 
-DaySimulator::DaySimulator(int dayDuration, int randomTime, QObject *parent):dayDuration_(dayDuration), randomTime_(randomTime), QObject(parent)
+DaySimulator::DaySimulator(QObject *parent) : QObject(parent)
 {
   std::random_device rd;
   gen_ = std::make_shared<std::mt19937>(rd());
@@ -26,6 +26,9 @@ Daytime DaySimulator::getTimeOfDay(uint64_t time)
 ////Returns the border of day for the time provided.
 uint DaySimulator::getEndOfDayTime(uint64_t time)
 {
+    //TODO better test to exclude corner cases where we could calculate below zero
+    if(dayDuration_ < 2*randomTime_)
+      return 0;
   //calculate if we're in day or night time
   //e.g. for day of 60 seconds and +/-5sec random:
   //0-24 is sure day, 35-59 is sure night, inbetween is random

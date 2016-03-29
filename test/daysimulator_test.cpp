@@ -7,7 +7,7 @@ class DaySimulatorTest : public testing::Test {
 //public:
     protected:
  virtual void SetUp() {
-        day_ = new DaySimulator(60,5);
+        day_ = new DaySimulator();
  }
 
  virtual void TearDown() {

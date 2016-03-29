@@ -8,3 +8,5 @@ Makefile
 moc_*
 street-light-simulator
 street-light-simulator-test
+*.gcno
+*travis.log

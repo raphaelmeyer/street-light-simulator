@@ -25,7 +25,8 @@ script:
   - ./street-light-simulator-test
 
 after_success:
-  - coveralls  -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"
+    - cd ../App
+    - coveralls  -E ".*CMakeFiles.*" -E ".*_test.cpp.*" -E ".*Main_TestAll.*" -E ".*moc_.*" --gcov-options '\-lp -o ../test/'
 
 notifications:
   slack:

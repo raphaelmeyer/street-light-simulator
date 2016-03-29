@@ -7,6 +7,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install libgtest-dev
   - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
+  - pip install --user cpp-coveralls
 
 install:
   - sudo apt-get -y install qt55-meta-full
@@ -22,3 +23,6 @@ script:
   - /opt/qt55/bin/qmake
   - make
   - ./street-light-simulator-test
+
+after_success:
+  - coveralls  -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"

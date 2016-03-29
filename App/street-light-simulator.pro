@@ -11,8 +11,16 @@ QT += widgets
 QT += quick
 CONFIG += staticlib
 CONFIG += release qt debug
+CONFIG += c++14
 
 # Input
-SOURCES += main.cpp 
+SOURCES += main.cpp \ 
+    daysimulator.cpp \
+    timeprovider.cpp
 RESOURCES += qml.qrc \
     ressources.qrc
+
+
+HEADERS += \
+    daysimulator.h \
+    timeprovider.h

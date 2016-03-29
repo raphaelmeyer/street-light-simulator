@@ -1,9 +1,12 @@
 sudo: required
 dist: trusty
+language: cpp
 
 before_install:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
   - sudo apt-get update -qq
+  - sudo apt-get install libgtest-dev
+  - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
 
 install:
   - sudo apt-get -y install qt55-meta-full
@@ -11,5 +14,11 @@ install:
 
 script:
   - source /opt/qt55/bin/qt55-env.sh
+  - cd App
   - /opt/qt55/bin/qmake
   - make
+  - cd ..
+  - cd test
+  - /opt/qt55/bin/qmake
+  - make
+  - ./street-light-simulator-test

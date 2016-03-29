@@ -8,32 +8,41 @@
 /// with synchronized computers you will always get the same randomTime.
 
 #include <QObject>
-#include <ctime>
 #include <QTimer>
 #include <cstdint>
+#include <memory>
 
 enum class Daytime {DAY, NIGHT};
 
+///Simulates a day/night cycle for times
 class DaySimulator : public QObject
 {
     Q_OBJECT
 public:
-    explicit DaySimulator(int dayDuration, int randomTime, QObject *parent = 0);
-    Daytime getDaytime(void);
+    ///Constructor
+/// @param dayDuration How long a day shall be in seconds
+/// @param randomTime How much the day/night cycle should be ranodm
+    explicit DaySimulator(int dayDuration, int randomTime, QObject *parent = nullptr);
+    ///Get the time of day (day/night) for time
+    /// @param time Time to query
+    Daytime getTimeOfDay(uint64_t time);
 
 signals:
-    void nightTime();
-    void dayTime();
+//    void nightTime();
+//    void dayTime();
 
 public slots:
 
 private:
-    int getDayTime(uint64_t time);
-    int getNightTime(uint64_t time);
-    void calculateDay(uint64_t time);
-    int dayDuration_=0;
-    int randomTime_=0;
-    QTimer timer_;
+    ///Returns the end of the day time, will give computer independent results
+    /// if the computers' times are synced. E.g. day/night cycles will be synced
+    /// if one uses for example time(0)
+    /// @param time Time to use as seed
+    uint getEndOfDayTime(uint64_t time);
+    uint dayDuration_;
+    uint randomTime_;
+    std::shared_ptr<std::uniform_int_distribution<int>> random_;
+    std::shared_ptr<std::mt19937> gen_;
 
 
 

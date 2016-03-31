@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <QDebug>
+#include <QSignalSpy>
 #include <memory>
 
 
@@ -61,9 +62,13 @@ EXPECT_EQ(day.getTimeOfDay(10), DaySimulator::Daytime::NONE);
 }
 
 TEST_F(DaySimulatorTest, can_set_and_get_properties)  {
+    QSignalSpy spyDay(day_.get(), SIGNAL(dayDurationChanged(uint)));
+    QSignalSpy spyRandom(day_.get(), SIGNAL(randomTimeChanged(uint)));
     day_->setDayDuration(11);
-    day_->setRandomTime(5);
+    EXPECT_EQ(spyDay.count(),1);
+    day_->setRandomTime(4);
+    EXPECT_EQ(spyRandom.count(),1);
     //Test that the parameters were set correctly
     EXPECT_EQ(day_->getDayDuration(),11);
-    EXPECT_EQ(day_->getRandomTime(),5);
+    EXPECT_EQ(day_->getRandomTime(),4);
 }

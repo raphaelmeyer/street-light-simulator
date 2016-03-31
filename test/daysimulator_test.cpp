@@ -58,3 +58,11 @@ day.setDayDuration(11);
 day.setRandomTime(6);
 EXPECT_EQ(day.getTimeOfDay(10), DaySimulator::Daytime::NONE);
 }
+
+TEST_F(DaySimulatorTest, can_set_and_get_properties)  {
+    day_->setDayDuration(11);
+    day_->setRandomTime(5);
+    //Test that the parameters were set correctly
+    EXPECT_EQ(day_->getDayDuration(),11);
+    EXPECT_EQ(day_->getRandomTime(),5);
+}

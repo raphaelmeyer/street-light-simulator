@@ -2,18 +2,19 @@
 
 #include <gtest/gtest.h>
 #include <QDebug>
+#include <memory>
 
 
 class DaySimulatorTest : public testing::Test {
 //public:
     protected:
  virtual void SetUp() {
-        day_ = new DaySimulator();
+        day_ = std::make_shared<DaySimulator>();
  }
 
  virtual void TearDown() {
  }
-    DaySimulator* day_;
+    std::shared_ptr<DaySimulator> day_;
 
 };
 

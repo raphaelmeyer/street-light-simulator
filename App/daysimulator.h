@@ -12,38 +12,58 @@
 #include <cstdint>
 #include <memory>
 
-enum class Daytime {DAY, NIGHT};
+//enum class Daytime {DAY, NIGHT, NONE};
 
 ///Simulates a day/night cycle for times
 class DaySimulator : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(uint dayDuration READ getDayDuration WRITE setDayDuration NOTIFY dayDurationChanged)
+    Q_PROPERTY(uint randomTime READ getRandomTime WRITE setRandomTime NOTIFY randomTimeChanged)
     //TODO add properties for dayduration and randomtime
 public:
+    enum Daytime {DAY, NIGHT, NONE};
+    Q_ENUM(Daytime)
     ///Constructor
 /// @param dayDuration How long a day shall be in seconds
 /// @param randomTime How much the day/night cycle should be ranodm
     //explicit DaySimulator(int dayDuration, int randomTime, QObject *parent = nullptr);
     explicit DaySimulator(QObject *parent = nullptr);
-    ///Get the time of day (day/night) for time
-    /// @param time Time to query
-    Daytime getTimeOfDay(uint64_t time);
+
+
+///Return the dayDuration
+    uint getDayDuration() const;
+    ///Return the RandomTime
+    uint getRandomTime() const;
 
 signals:
-//    void nightTime();
+    void dayDurationChanged(uint newValue);
+    void randomTimeChanged(uint newValue);
+    //    void nightTime();
 //    void dayTime();
 
 public slots:
+    /// Set the time duration of this DaySimulator instance
+    /// @param duration The duration of the day
+    void setDayDuration(uint duration);
+    ///Set the RandomTime to add to the day of this DaySimulator instance
+    /// @param randomTime the random Time
+    void setRandomTime(uint randomTime);
+    ///Get the time of day (day/night) for time
+    /// @param time Time to query
+    Daytime getTimeOfDay(quint64 time);
 
 private:
     ///Returns the end of the day time, will give computer independent results
     /// if the computers' times are synced. E.g. day/night cycles will be synced
     /// if one uses for example time(0)
     /// @param time Time to use as seed
-    uint getEndOfDayTime(uint64_t time);
-    uint dayDuration_=60;
-    uint randomTime_=5;
-    std::shared_ptr<std::uniform_int_distribution<int>> random_;
+    int getEndOfDayTime(uint64_t time);
+
+    uint dayDuration_=60; //!< The duration of the simulated day
+    uint randomTime_=5; //!< The random Time to add to the day
+    std::shared_ptr<std::uniform_int_distribution<int>> random_; //!<
     std::shared_ptr<std::mt19937> gen_;
 };
 

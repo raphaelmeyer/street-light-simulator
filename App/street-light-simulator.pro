@@ -20,8 +20,7 @@ QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
 
 # Input
 SOURCES += main.cpp \ 
-    daysimulator.cpp \
-    timeprovider.cpp
+    daysimulator.cpp
 RESOURCES += qml.qrc \
     ressources.qrc
 

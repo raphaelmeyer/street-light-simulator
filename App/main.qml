@@ -3,13 +3,17 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
+import com.bbv.StreetLightSimulator 1.0
+
 ApplicationWindow {
-    title: qsTr("Hello World")
+    title: qsTr("Street light simulator")
     //width: 1024
     //height: 768
+    property bool streetLight: false;
     visible: true
+    Component.onCompleted: updateStreetImage();
 
-    menuBar: MenuBar {
+    /* menuBar: MenuBar {
         Menu {
             title: qsTr("&File")
             MenuItem {
@@ -21,20 +25,21 @@ ApplicationWindow {
                 onTriggered: Qt.quit();
             }
         }
+    }*/
+
+    Rectangle {
+        width: 1024
+        height: 768
+        Image {
+            id: streetImage
+            anchors.fill: parent
+            source: "strasse_tag"
+            fillMode: Image.PreserveAspectFit
+        }
+
     }
 
-   Rectangle {
-       width: 1024
-       height: 768
-       Image {
-           anchors.fill: parent
-           source: "strasse_tag"
-           fillMode: Image.PreserveAspectFit
-       }
-
-   }
-
-    MessageDialog {
+    /*MessageDialog {
         id: messageDialog
         title: qsTr("May I have your attention, please?")
 
@@ -42,6 +47,35 @@ ApplicationWindow {
             messageDialog.text = caption;
             messageDialog.open();
         }
+    }*/
+
+    Timer {
+        repeat: true
+        running: true
+        onTriggered: updateStreetImage();
+
+    }
+
+    DaySimulator {
+        id: daySimulator
+    }
+
+    function updateStreetImage() {
+        var now = Math.floor(new Date().getTime() / 1000);
+        console.log("It is now "+now+" it is: "+now%daySimulator.dayDuration);
+        if(daySimulator.getTimeOfDay(now) === DaySimulator.DAY) {
+            if(streetLight)
+                streetImage.source = "strasse_tag_licht"
+            else
+                streetImage.source = "strasse_tag"
+        }
+        else {
+            if(streetLight)
+                streetImage.source = "strasse_nacht_licht"
+            else
+                streetImage.source = "strasse_nacht"
+        }
+
     }
 
 }

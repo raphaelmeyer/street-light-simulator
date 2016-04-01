@@ -9,6 +9,7 @@ INCLUDEPATH += .
 QT += widgets
 QT += qml
 QT += quick
+QT += dbus
 CONFIG += staticlib
 CONFIG += release qt debug
 CONFIG += c++14
@@ -20,11 +21,15 @@ QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
 
 # Input
 SOURCES += main.cpp \ 
-    daysimulator.cpp
+    daysimulator.cpp \
+    dbusobject.cpp \
+    stateexchanger.cpp
 RESOURCES += qml.qrc \
     ressources.qrc
 
 
 HEADERS += \
     daysimulator.h \
-    timeprovider.h
+    timeprovider.h \
+    stateexchanger.h \
+    dbusobject.h

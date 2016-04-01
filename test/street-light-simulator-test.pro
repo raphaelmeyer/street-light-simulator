@@ -6,6 +6,7 @@ CONFIG += coverage
 QT += quick
 QT += widgets
 QT += testlib qml
+QT += dbus
 CONFIG += c++14
 
 QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
@@ -16,11 +17,17 @@ INCLUDEPATH += ../test/ \
 
 SOURCES += \
  ../App/daysimulator.cpp \
+../App/stateexchanger.cpp \
+    ../App/dbusobject.cpp  \
     daysimulator_test.cpp \
+    stateexchanger_test.cpp \
     Main_TestAll.cpp
 
+
 HEADERS += \
-../App/daysimulator.h
+../App/daysimulator.h \
+../App/stateexchanger.h \
+dbusobject.h
 
 
 #include(deployment.pri)

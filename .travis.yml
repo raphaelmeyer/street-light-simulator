@@ -12,7 +12,6 @@ before_install:
 install:
   - sudo apt-get -y install qt55-meta-full
 
-
 script:
   - source /opt/qt55/bin/qt55-env.sh
   - cd App
@@ -22,7 +21,7 @@ script:
   - cd test
   - /opt/qt55/bin/qmake
   - make
-  - ./street-light-simulator-test
+  - dbus-launch ./street-light-simulator-test
 
 after_success:
     - cd ../App

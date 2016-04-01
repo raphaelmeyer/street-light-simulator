@@ -7,9 +7,9 @@ import com.bbv.StreetLightSimulator 1.0
 
 ApplicationWindow {
     title: qsTr("Street light simulator")
+    objectName: "gui"
     //width: 1024
     //height: 768
-    property bool streetLight: false;
     visible: true
     Component.onCompleted: updateStreetImage();
 
@@ -64,13 +64,15 @@ ApplicationWindow {
         var now = Math.floor(new Date().getTime() / 1000);
         console.log("It is now "+now+" it is: "+now%daySimulator.dayDuration);
         if(daySimulator.getTimeOfDay(now) === DaySimulator.DAY) {
-            if(streetLight)
+            cppBrightness.scaled = 1.0;
+            if(cppLuminosity.scaled > 0)
                 streetImage.source = "strasse_tag_licht"
             else
                 streetImage.source = "strasse_tag"
         }
         else {
-            if(streetLight)
+            cppBrightness.scaled = 0;
+            if(cppLuminosity.scaled > 0)
                 streetImage.source = "strasse_nacht_licht"
             else
                 streetImage.source = "strasse_nacht"

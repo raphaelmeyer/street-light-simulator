@@ -14,6 +14,7 @@ class DaySimulatorTest : public testing::Test {
  }
 
  virtual void TearDown() {
+        day_.reset();
  }
     std::shared_ptr<DaySimulator> day_;
 

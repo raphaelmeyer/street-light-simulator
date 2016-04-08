@@ -30,12 +30,20 @@ ApplicationWindow {
     Rectangle {
         width: 1024
         height: 768
+
         Image {
             id: streetImage
             anchors.fill: parent
             source: "strasse_tag"
             fillMode: Image.PreserveAspectFit
         }
+        Image {
+            id: lightsource
+            anchors.fill: parent
+            source: ""
+            fillMode: Image.PreserveAspectFit
+        }
+
 
     }
 
@@ -60,24 +68,34 @@ ApplicationWindow {
         id: daySimulator
     }
 
-    function updateStreetImage() {
-        var now = Math.floor(new Date().getTime() / 1000);
-        console.log("It is now "+now+" it is: "+now%daySimulator.dayDuration);
-        if(daySimulator.getTimeOfDay(now) === DaySimulator.DAY) {
-            cppBrightness.scaled = 1.0;
-            if(cppLuminosity.scaled > 0)
-                streetImage.source = "strasse_tag_licht"
-            else
+    Item {
+        id:brightnessObject
+        property double brightness: cppBrightness.scaled
+        onBrightnessChanged: {
+            if(brightness > 0)
                 streetImage.source = "strasse_tag"
-        }
-        else {
-            cppBrightness.scaled = 0;
-            if(cppLuminosity.scaled > 0)
-                streetImage.source = "strasse_nacht_licht"
             else
                 streetImage.source = "strasse_nacht"
         }
+    }
+    Item {
+        id:luminosityObject
+        property double luminosity: cppLuminosity.scaled
+        onLuminosityChanged: {
+            if(luminosity > 0)
+              lightsource.source = "light"
+            else
+                lightsource.source = ""
+        }
+    }
 
+    function updateStreetImage() {
+        var now = Math.floor(new Date().getTime() / 1000);
+        //console.log("It is now "+now+" it is: "+now%daySimulator.dayDuration);
+        if(daySimulator.getTimeOfDay(now) === DaySimulator.DAY)
+            cppBrightness.scaled = 1;
+        else
+            cppBrightness.scaled = 0
     }
 
 }

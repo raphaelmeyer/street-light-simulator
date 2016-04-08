@@ -5,7 +5,6 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -19,7 +18,6 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("cppBrightness", stateexchanger.brightness().get());
     engine.rootContext()->setContextProperty("cppLuminosity", stateexchanger.luminosity().get());
-
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

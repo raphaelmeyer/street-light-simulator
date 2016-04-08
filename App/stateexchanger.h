@@ -18,7 +18,7 @@ class Brightness : public DBusObject
     Q_OBJECT
     ///Define the interface
     Q_CLASSINFO("D-Bus Interface", "ch.bbv.brightness")
-    Q_PROPERTY(double scaled READ getScaledBrightness WRITE setScaledBrightness)
+    Q_PROPERTY(double scaled READ getScaledBrightness WRITE setScaledBrightness NOTIFY brightnessChanged())
 public:
     Brightness(QObject *application) : DBusObject(application) {}
 
@@ -40,7 +40,7 @@ class Luminosity : public DBusObject
     Q_OBJECT
     //Define the interface
     Q_CLASSINFO("D-Bus Interface", "ch.bbv.luminosity")
-    Q_PROPERTY(double scaled READ getScaledLuminosity WRITE setScaledLuminosity)
+    Q_PROPERTY(double scaled READ getScaledLuminosity WRITE setScaledLuminosity NOTIFY luminosityChanged())
 public:
     Luminosity(QObject *application) : DBusObject(application) {}
 

@@ -44,7 +44,30 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             opacity: luminosityObject.luminosity
         }
+        Image {
+            id: auto
+            source: "auto"
+            x: (autoLocation.value)*1000
+            y: 420 + (1-autoLocation.value)*100
+            fillMode: Image.PreserveAspectFit
+            width: parent.width/15 + (1-autoLocation.value)*400
+            rotation: -25+(1-autoLocation.value)*25
+        }
+    }
 
+    Slider {
+        id: autoLocation
+        orientation: Qt.Horizontal
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+
+        anchors.bottom: parent.bottom
+
+        onValueChanged: {
+            //console.log("Value is now"+value+"auto size:"+auto.width)
+        }
 
     }
 

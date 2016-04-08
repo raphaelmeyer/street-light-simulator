@@ -42,6 +42,7 @@ ApplicationWindow {
             anchors.fill: parent
             source: ""
             fillMode: Image.PreserveAspectFit
+            opacity: luminosityObject.luminosity
         }
 
 
@@ -61,7 +62,6 @@ ApplicationWindow {
         repeat: true
         running: true
         onTriggered: updateStreetImage();
-
     }
 
     DaySimulator {

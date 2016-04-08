@@ -42,7 +42,7 @@ TEST_F(DaySimulatorTest, uneven_day_with_borderline_big_random)  {
 TEST_F(DaySimulatorTest, day_only_has_one_daytime_boundary)  {
     //Make sure the day/night time doesn't switch back and forth in between one single day
     //aka. there's a clear boundary between day and night
-    for(int i=0; i<100; i++)
+    for(int i=0; i<50; i++)
 
         for(int i=0; i<50; i++)
         {
@@ -58,7 +58,7 @@ TEST_F(DaySimulatorTest, day_only_has_one_daytime_boundary)  {
 
 TEST_F(DaySimulatorTest, multiple_instances_have_same_day_boundary)  {
     //Test that multiple instances (a.k.a. multiple computers) have some day/night boundary
-    for(int i=0; i<100; i++)
+    for(int i=0; i<100; i++) {
         std::shared_ptr<DaySimulator> day2 = std::make_shared<DaySimulator>();
         for(int i=0; i<50; i++)
         {
@@ -79,7 +79,6 @@ TEST_F(DaySimulatorTest, multiple_instances_have_same_day_boundary)  {
             }
             EXPECT_EQ(dayBoundary, day2Boundary);
         }
-        EXPECT_EQ(dayBoundary, day2Boundary);
     }
 }
 

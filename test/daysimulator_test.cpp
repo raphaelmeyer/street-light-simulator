@@ -64,7 +64,6 @@ TEST_F(DaySimulatorTest, multiple_instances_have_same_day_boundary)  {
         {
             int dayBoundary = 0;
             int day2Boundary = 0;
-            DaySimulator::Daytime current = DaySimulator::Daytime::DAY;
             //Go to the day boundary
             for(int j=24; j<35; j++){
                 //if this is the first time it's not day for day_

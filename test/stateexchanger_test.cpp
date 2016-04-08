@@ -37,11 +37,6 @@ TEST_F(StateExchangerTest, can_get_and_set_luminosity) {
     dbus_luminosity_->setProperty("scaled", 0.5);
     EXPECT_EQ(spy.count(),1);
     EXPECT_EQ(dbus_luminosity_->property("scaled"), 0.5);
-    /*
-while(true){
-    QCoreApplication::instance()->processEvents();
-}
-*/
 }
 
 TEST_F(StateExchangerTest, can_get_and_set_brightness) {

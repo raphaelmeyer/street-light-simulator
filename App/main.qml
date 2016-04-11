@@ -40,9 +40,9 @@ ApplicationWindow {
         Image {
             id: lightsource
             anchors.fill: parent
-            source: ""
+            source: "light"
+            opacity: 0
             fillMode: Image.PreserveAspectFit
-            opacity: luminosityObject.luminosity
         }
         Image {
             id: auto
@@ -105,10 +105,7 @@ ApplicationWindow {
         id:luminosityObject
         property double luminosity: cppLuminosity.scaled
         onLuminosityChanged: {
-            if(luminosity > 0)
-              lightsource.source = "light"
-            else
-                lightsource.source = ""
+            lightsource.opacity =  luminosityObject.luminosity
         }
     }
 

@@ -56,6 +56,26 @@ private:
     double luminosity_ = 0; ///!< The luminosity of our lamp
 };
 
+class Moisture : public DBusObject
+{
+    Q_OBJECT
+    //Define the interface
+    Q_CLASSINFO("D-Bus Interface", "ch.bbv.moisture")
+    Q_PROPERTY(double scaled READ getScaledMoisture WRITE setScaledMoisture NOTIFY moistureChanged())
+public:
+    Moisture(QObject *application) : DBusObject(application) {}
+
+    //Returns the scaled moisture of our lamp (0-1.0)
+    double getScaledMoisture() const;
+    //Sets the scaled moisture of our lamp (0-1.0)
+    void setScaledMoisture(double moisture);
+
+signals:
+    void moistureChanged(double moisture);
+
+private:
+    double moisture_ = 0; ///!< The moisture of our simulated environment
+};
 
 //Exchanges the state of the street-light over D-Bus
 class StateExchanger : public QObject
@@ -69,6 +89,8 @@ public:
     std::shared_ptr<Brightness> brightness() const;
     ///Return the luminosity instance of this instance
     std::shared_ptr<Luminosity> luminosity() const;
+    ///Return the moisture instance of this instance
+    std::shared_ptr<Moisture> moisture() const;
 
 public slots:
     bool initialize();
@@ -76,6 +98,7 @@ public slots:
 private:
     std::shared_ptr<Brightness> brightness_; ///!< Pointer to a brightness sensor instance
     std::shared_ptr<Luminosity> luminosity_; ///!< Pointer to the luminosity instance of this lamp
+    std::shared_ptr<Moisture> moisture_; ///!< Pointer to the luminosity instance of this lamp
 };
 
 #endif // STATEEXCHANGER_H

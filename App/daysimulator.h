@@ -6,22 +6,21 @@
 /// Example: DaySimulator(60,5) will simulate a day every 60 seconds, +-5seconds
 /// The randomTime addition is constant over multiple computers,
 /// with synchronized computers you will always get the same randomTime.
+/// Which in turn means the transition from day to night will be the same over multiple computers.
+
+#include "eventsimulator.h"
 
 #include <QObject>
-#include <QTimer>
 #include <cstdint>
 #include <memory>
 
 //enum class Daytime {DAY, NIGHT, NONE};
 
 ///Simulates a day/night cycle for times
-class DaySimulator : public QObject
+class DaySimulator : public EventSimulator
 {
     Q_OBJECT
-
-    Q_PROPERTY(uint dayDuration READ getDayDuration WRITE setDayDuration NOTIFY dayDurationChanged)
-    Q_PROPERTY(uint randomTime READ getRandomTime WRITE setRandomTime NOTIFY randomTimeChanged)
-    //TODO add properties for dayduration and randomtime
+    Q_PROPERTY(Daytime daytime READ getDaytime WRITE setDaytime NOTIFY daytimeChanged)
 public:
     enum Daytime {DAY, NIGHT, NONE};
     Q_ENUM(Daytime)
@@ -32,39 +31,18 @@ public:
     explicit DaySimulator(QObject *parent = nullptr);
 
 
-///Return the dayDuration
-    uint getDayDuration() const;
-    ///Return the RandomTime
-    uint getRandomTime() const;
-
-signals:
-    void dayDurationChanged(uint newValue);
-    void randomTimeChanged(uint newValue);
-    //    void nightTime();
-//    void dayTime();
-
+    Daytime getDaytime() const;
 public slots:
-    /// Set the time duration of this DaySimulator instance
-    /// @param duration The duration of the day
-    void setDayDuration(uint duration);
-    ///Set the RandomTime to add to the day of this DaySimulator instance
-    /// @param randomTime the random Time
-    void setRandomTime(uint randomTime);
-    ///Get the time of day (day/night) for time
-    /// @param time Time to query
-    Daytime getTimeOfDay(quint64 time);
+    void setDaytime(const Daytime &daytime);
+signals:
+    void daytimeChanged(Daytime daytime);
+
+private slots:
+    virtual void timeout();
 
 private:
-    ///Returns the end of the day time, will give computer independent results
-    /// if the computers' times are synced. E.g. day/night cycles will be synced
-    /// if one uses for example time(0)
-    /// @param time Time to use as seed
-    int getEndOfDayTime(uint64_t time);
-
-    uint dayDuration_=60; //!< The duration of the simulated day
-    uint randomTime_=5; //!< The random Time to add to the day
-    std::shared_ptr<std::uniform_int_distribution<int>> random_; //!<
-    std::shared_ptr<std::mt19937> gen_;
+    Daytime daytime_ = Daytime::DAY;
+    std::shared_ptr<QTimer> timer_;
 };
 
 #endif // DAYSIMULATOR_H

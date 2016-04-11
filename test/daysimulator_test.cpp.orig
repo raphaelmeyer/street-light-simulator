@@ -19,7 +19,7 @@ protected:
     std::shared_ptr<DaySimulator> day_;
 
 };
-/*
+
 TEST_F(DaySimulatorTest, valid_day_and_night_periods)  {
     //Test default values of 60s day, 5 random
     for(int i=0;i<24;i++)
@@ -64,8 +64,13 @@ TEST_F(DaySimulatorTest, multiple_instances_have_same_day_boundary)  {
         {
             int dayBoundary = 0;
             int day2Boundary = 0;
+            DaySimulator::Daytime current = DaySimulator::Daytime::DAY;
             //Go to the day boundary
             for(int j=24; j<35; j++){
+<<<<<<< HEAD
+=======
+                //DaySimulator::Daytime thisDayTime = day_->getTimeOfDay(j+i*60);
+>>>>>>> 8d960b8... Testing 50 instead of 100 instances
                 //if this is the first time it's not day for day_
                 if((day_->getTimeOfDay(j+i*60) != DaySimulator::Daytime::DAY) && (dayBoundary == 0))
                     dayBoundary = j;
@@ -99,4 +104,3 @@ TEST_F(DaySimulatorTest, can_set_and_get_properties)  {
     EXPECT_EQ(day_->getDayDuration(),11);
     EXPECT_EQ(day_->getRandomTime(),4);
 }
-*/

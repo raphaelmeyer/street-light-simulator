@@ -23,13 +23,17 @@ QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
 SOURCES += main.cpp \ 
     daysimulator.cpp \
     dbusobject.cpp \
-    stateexchanger.cpp
+    stateexchanger.cpp \
+    eventsimulator.cpp \
+    rainsimulator.cpp
+
 RESOURCES += qml.qrc \
     ressources.qrc
-
 
 HEADERS += \
     daysimulator.h \
     timeprovider.h \
     stateexchanger.h \
-    dbusobject.h
+    dbusobject.h \
+    eventsimulator.h \
+    rainsimulator.h

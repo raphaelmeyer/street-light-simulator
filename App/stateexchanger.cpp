@@ -19,8 +19,7 @@ bool StateExchanger::initialize()
     moisture_ = std::make_shared<Moisture>(this);
 
     if(brightness_==nullptr || luminosity_==nullptr || moisture_==nullptr) {
-        qDebug() << "Could not create a D-Bus object";
-        return false;
+        throw std::runtime_error("Could not create a D-Bus object");
     }
 
     if(!QDBusConnection::sessionBus().registerService(SERVICE_NAME))
@@ -28,9 +27,7 @@ bool StateExchanger::initialize()
         qDebug() << "Could not register service";
         return false;
     }
-    //QDBusConnection::sessionBus().registerObject("/ch/bbv/streetlight","ch.bbv.streetLightSimulator",this, QDBusConnection::ExportChildObjects);
     QDBusConnection::sessionBus().registerObject(PATH_NAME, this);
-    //qDebug() << "Registered object";
 
     return true;
 }

@@ -4,5 +4,6 @@
         <file alias="strasse_tag">assets/images/strasse_tag.tif</file>
         <file alias="auto">assets/images/auto.png</file>
         <file alias="light">assets/images/licht.png</file>
+        <file alias="rain">assets/images/rain.png</file>
     </qresource>
 </RCC>

@@ -11,21 +11,6 @@ ApplicationWindow {
     //width: 1024
     //height: 768
     visible: true
-    Component.onCompleted: updateStreetImage();
-
-    /* menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-            MenuItem {
-                text: qsTr("&Open")
-                onTriggered: messageDialog.show(qsTr("Open action triggered"));
-            }
-            MenuItem {
-                text: qsTr("E&xit")
-                onTriggered: Qt.quit();
-            }
-        }
-    }*/
 
     Rectangle {
         width: 1024
@@ -36,6 +21,19 @@ ApplicationWindow {
             anchors.fill: parent
             source: "strasse_tag"
             fillMode: Image.PreserveAspectFit
+            Connections {
+                target: cppDay
+                onDaytimeChanged: {
+                    if(cppDay.daytime === DaySimulator.DAY) {
+                        streetImage.source = "strasse_tag"
+                        cppBrightness.scaled = 1
+                    }
+                    else {
+                        streetImage.source = "strasse_nacht"
+                        cppBrightness.scaled = 0
+                    }
+                }
+            }
         }
         Image {
             id: lightsource
@@ -43,6 +41,20 @@ ApplicationWindow {
             source: "light"
             opacity: 0
             fillMode: Image.PreserveAspectFit
+        }
+        Image {
+            id: rain
+            anchors.fill: parent
+            source: "rain"
+            visible: false
+            fillMode: Image.PreserveAspectFit
+            Connections {
+                target: cppRain
+                onRainChanged: {
+                    rain.visible = cppRain.rain
+                    cppMoisture = cppRain.rain == true ? 1.0 : 0 ;
+                }
+            }
         }
         Image {
             id: auto
@@ -71,51 +83,13 @@ ApplicationWindow {
 
     }
 
-    /*MessageDialog {
-        id: messageDialog
-        title: qsTr("May I have your attention, please?")
 
-        function show(caption) {
-            messageDialog.text = caption;
-            messageDialog.open();
-        }
-    }*/
-
-    Timer {
-        repeat: true
-        running: true
-        onTriggered: updateStreetImage();
-    }
-
-    DaySimulator {
-        id: daySimulator
-    }
-
-    Item {
-        id:brightnessObject
-        property double brightness: cppBrightness.scaled
-        onBrightnessChanged: {
-            if(brightness > 0)
-                streetImage.source = "strasse_tag"
-            else
-                streetImage.source = "strasse_nacht"
-        }
-    }
     Item {
         id:luminosityObject
         property double luminosity: cppLuminosity.scaled
         onLuminosityChanged: {
             lightsource.opacity =  luminosityObject.luminosity
         }
-    }
-
-    function updateStreetImage() {
-        var now = Math.floor(new Date().getTime() / 1000);
-        //console.log("It is now "+now+" it is: "+now%daySimulator.dayDuration);
-        if(daySimulator.getTimeOfDay(now) === DaySimulator.DAY)
-            cppBrightness.scaled = 1;
-        else
-            cppBrightness.scaled = 0
     }
 
 }

@@ -19,14 +19,20 @@ SOURCES += \
  ../App/daysimulator.cpp \
 ../App/stateexchanger.cpp \
     ../App/dbusobject.cpp  \
+    ../App/eventsimulator.cpp  \
+    ../App/rainsimulator.cpp  \
     daysimulator_test.cpp \
     stateexchanger_test.cpp \
+    eventsimulator_test.cpp \
     Main_TestAll.cpp
+
 
 
 HEADERS += \
 ../App/daysimulator.h \
 ../App/stateexchanger.h \
+../App/eventsimulator.h \
+../App/rainsimulator.h \
 dbusobject.h
 
 

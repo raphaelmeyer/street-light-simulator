@@ -20,7 +20,7 @@ protected:
     virtual void TearDown() {
         event_.reset();
     }
-    std::shared_ptr<EventSimulator> event_;
+    std::shared_ptr<RainSimulator> event_;
 
 };
 
@@ -108,6 +108,15 @@ TEST_F(EventSimulatorTest, can_get_and_set_timer_and_it_will_trigger)  {
     usleep(1000);
     QCoreApplication::processEvents();
     EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(event_->getRain(), true);
+    //check for change back to no rain
+    spy.clear();
+    event_->setTiming(1);
+    timer->start();
+    usleep(1000);
+    QCoreApplication::processEvents();
+    EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(event_->getRain(), false);
 }
 
 TEST_F(EventSimulatorTest, uneven_event_with_borderline_big_random)  {

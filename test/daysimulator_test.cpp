@@ -81,5 +81,14 @@ TEST_F(DaySimulatorTest, can_get_and_set_timer_and_it_will_trigger)  {
     usleep(1000);
     QCoreApplication::processEvents();
     EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(day_->getDaytime(),DaySimulator::NIGHT);
+    //check for switch back to day
+    spy.clear();
+    day_->setTiming(1);
+    timer->start();
+    usleep(1000);
+    QCoreApplication::processEvents();
+    EXPECT_EQ(spy.count(),1);
+        EXPECT_EQ(day_->getDaytime(),DaySimulator::DAY);
 }
 

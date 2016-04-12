@@ -21,6 +21,7 @@ class DaySimulator : public EventSimulator
 {
     Q_OBJECT
     Q_PROPERTY(Daytime daytime READ getDaytime WRITE setDaytime NOTIFY daytimeChanged)
+    Q_PROPERTY(quint64 nightStart READ getNightStart NOTIFY nightStartChanged)
 public:
     enum Daytime {DAY, NIGHT, NONE};
     Q_ENUM(Daytime)
@@ -32,19 +33,21 @@ public:
 
     void setRandomTime(uint randomTime);
     void setCycle(uint cycle);
-
-
     Daytime getDaytime() const;
+    uint64_t getNightStart() const;
 public slots:
     void setDaytime(const Daytime &daytime);
 signals:
     void daytimeChanged(Daytime daytime);
+    void nightStartChanged(uint64_t nightStart);
 
 private slots:
     virtual void timeout();
 
 private:
-    Daytime daytime_ = Daytime::DAY;
+    void setNightStart(uint64_t nightStart);
+    Daytime daytime_{Daytime::DAY};
+    uint64_t nightStart_{0};
     std::shared_ptr<QTimer> timer_;
 };
 

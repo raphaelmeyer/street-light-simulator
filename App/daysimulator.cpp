@@ -17,6 +17,19 @@ DaySimulator::DaySimulator(QObject *parent) : EventSimulator(parent)
     qDebug() << "Random time for day is " << getRandomTime() <<", timing is " << getTiming();
 
 }
+
+void DaySimulator::setRandomTime(uint randomTime)
+{
+    EventSimulator::setRandomTime(randomTime);
+    setTiming( ((getCycle()-randomTime) / 2.0) / getCycle());
+}
+
+void DaySimulator::setCycle(uint cycle)
+{
+    EventSimulator::setCycle(cycle);
+    setTiming( ((cycle-getRandomTime()) / 2.0) / cycle);
+
+}
 DaySimulator::Daytime DaySimulator::getDaytime() const
 {
     return daytime_;

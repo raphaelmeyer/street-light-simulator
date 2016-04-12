@@ -30,6 +30,9 @@ public:
     //explicit DaySimulator(int dayDuration, int randomTime, QObject *parent = nullptr);
     explicit DaySimulator(QObject *parent = nullptr);
 
+    void setRandomTime(uint randomTime);
+    void setCycle(uint cycle);
+
 
     Daytime getDaytime() const;
 public slots:

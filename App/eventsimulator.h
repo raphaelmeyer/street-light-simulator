@@ -23,18 +23,18 @@ public:
     explicit EventSimulator(QObject *parent = nullptr);
 
     ///Return the RandomTime
-    uint getRandomTime() const;
+    virtual uint getRandomTime() const;
 
-    uint getCycle() const;
+    virtual uint getCycle() const;
 
-    uint getDuration() const;
+    virtual uint getDuration() const;
 
-    float getTiming() const;
+    virtual float getTiming() const;
 
-    int getEventStart(uint64_t time);
-    int getEventEnd(uint64_t time);
+    virtual uint64_t getEventStart(uint64_t time);
+    virtual uint64_t getEventEnd(uint64_t time);
 
-    void setTimer(std::shared_ptr<QTimer> timer);
+    virtual void setTimer(std::shared_ptr<QTimer> timer);
 
 signals:
     void durationChanged(uint newValue);
@@ -46,19 +46,19 @@ public slots:
 
     ///Set the RandomTime to add to the day of this DaySimulator instance
     /// @param randomTime the random Time
-    void setRandomTime(uint randomTime);
-    void setDuration(const uint &duration);
-    void setTiming(float value);
-    void setCycle(const uint &value);
+    virtual void setRandomTime(uint randomTime);
+    virtual void setDuration(const uint &duration);
+    virtual void setTiming(float value);
+    virtual void setCycle(const uint &value);
 
 private slots:
     virtual void timeout() = 0;
 
 private:
-    uint cycle_ = 60;
-    uint duration_=30; //!< The duration of the simulated day
-    uint randomTime_=5; //!< The random Time to add to the day
-    float timing_=0.5;
+    uint cycle_{60}; //!<the duration of the simulated thing
+    uint duration_{60}; //!< The duration of the event in the cycle, too big events will be truncated to the end of the cycle
+    uint randomTime_{5}; //!< The random Time to add to the event timing
+    float timing_{0.5}; //!< the timing relative to the cycle length
 
     std::shared_ptr<std::uniform_int_distribution<int>> random_; //!<
     std::shared_ptr<std::mt19937> gen_;

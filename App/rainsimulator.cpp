@@ -15,7 +15,7 @@ RainSimulator::RainSimulator(QObject *parent) : EventSimulator(parent)
 }
 
 void RainSimulator::timeout() {
-    time_t now = time(0);
+    uint64_t now = time(0);
     if( (getEventStart(now) < now) && (getEventEnd(now) > now))
         setRaining(true);
     else

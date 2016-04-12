@@ -7,10 +7,9 @@
 
 
 class EventSimulatorTest : public testing::Test {
-    //public:
 protected:
     virtual void SetUp() {
-        //RainSimulator implements EventSimulator
+        //RainSimulator implements the pure virtual class EventSimulator
         event_ = std::make_shared<RainSimulator>();
         event_->setDuration(60);
         event_->setCycle(60);
@@ -25,13 +24,49 @@ protected:
 
 };
 
-TEST_F(EventSimulatorTest, valid_for_normal_day_and_night)  {
-    //Test default values of 60s day, 5 random
-    for(int i=0; i<50; i++) {
-        EXPECT_GE(event_->getEventStart(i*60)%60, 24);
-        EXPECT_EQ(event_->getEventEnd(i*60)%60, 0);
-    }
+TEST_F(EventSimulatorTest, can_get_and_random_time)  {
+    QSignalSpy spy(event_.get(), SIGNAL(randomTimeChanged(uint)));
+     event_->setRandomTime(50);
+     EXPECT_EQ(spy.count(),1);
+     EXPECT_EQ(event_->getRandomTime(),50);
 }
+
+TEST_F(EventSimulatorTest, can_get_and_duration)  {
+    QSignalSpy spy(event_.get(), SIGNAL(durationChanged(uint)));
+     event_->setDuration(50);
+     EXPECT_EQ(spy.count(),1);
+     EXPECT_EQ(event_->getDuration(),50);
+}
+
+TEST_F(EventSimulatorTest, can_get_and_timing)  {
+    QSignalSpy spy(event_.get(), SIGNAL(timingChanged(float)));
+     event_->setTiming(0.9);
+     EXPECT_EQ(spy.count(),1);
+     EXPECT_FLOAT_EQ(event_->getTiming(),0.9);
+     //test limits of timing
+     spy.clear();
+     event_->setTiming(1.1);
+     EXPECT_EQ(spy.count(),0);
+     EXPECT_FLOAT_EQ(event_->getTiming(),0.9);
+     event_->setTiming(-0.1);
+     EXPECT_EQ(spy.count(),0);
+     EXPECT_FLOAT_EQ(event_->getTiming(),0.9);
+}
+
+TEST_F(EventSimulatorTest, can_get_and_cycle)  {
+    QSignalSpy spy(event_.get(), SIGNAL(cycleChanged(uint)));
+     event_->setCycle(50);
+     EXPECT_EQ(spy.count(),1);
+     EXPECT_EQ(event_->getCycle(),50);
+}
+
+/*TEST_F(EventSimulatorTest, valid_for_normal_day_and_night)  {
+    //Test default values of 60s day, 5 random
+    for(int i=0; i<5; i++) {
+        EXPECT_GE(event_->getEventStart(i*60), 24+i*60);
+        EXPECT_EQ(event_->getEventEnd(i*60), 60+i*60);
+    }
+}*/
 
 
 //simulate a case in which we want 5 second events between the 20 and 40 second mark of every minute
@@ -45,82 +80,54 @@ TEST_F(EventSimulatorTest, shorter_event_duration_is_calculated_correctly)  {
     //we have a actual range of event start from 20 to 34, which means the event is always over before the 40th second.
     //We accept this behaviour here.
     for(int i=0; i<50; i++) {
+        //event start should occur somewhere between 20 and 34
         EXPECT_GE(event_->getEventStart(i*60)%60, 20);
         EXPECT_LE(event_->getEventStart(i*60)%60, 34);
+        //event end should occur somewhere between 25 and 39
         EXPECT_GE(event_->getEventEnd(i*60)%60, 25);
         EXPECT_LE(event_->getEventEnd(i*60)%60, 39);
+        //check that the times actually increases
+        EXPECT_GE(event_->getEventStart(i*60),i*60);
+        EXPECT_GE(event_->getEventEnd(i*60),i*60);
     }
 }
 
-//TODO. add tests for timers, look at below tests if still needed
-/*
+//test that if we set a timer it will trigger
+//as we cannot test the timeout signal directly, check if rain changed
+//when it was set up to should have changed on timer signal
+TEST_F(EventSimulatorTest, can_get_and_set_timer_and_it_will_trigger)  {
+     QSignalSpy spy(event_.get(), SIGNAL(rainChanged(bool)));
+    std::shared_ptr<QTimer> timer = std::make_shared<QTimer>();
+    timer->stop();
+    timer->setInterval(1);
+    timer->setSingleShot(true);
+    event_->setTimer(timer);
+    event_->setTiming(0);
+    event_->setRandomTime(0);
+    timer->start();
+    usleep(1000);
+    QCoreApplication::processEvents();
+    EXPECT_EQ(spy.count(),1);
+}
+
 TEST_F(EventSimulatorTest, uneven_event_with_borderline_big_random)  {
-    //Test corner case, 11 will always be night
+    //Test corner case, 11 will always be event
     event_->setDuration(11);
     event_->setRandomTime(5);
     //Test first 100 days to make sure the algorithm works right
     for(int i=0;i<100;i++)
-        EXPECT_EQ(event_->getEventStart(10+i*11),EventSimulator::Daytime::NIGHT);
-}
-/*
-TEST_F(EventSimulatorTest, event_only_has_one_daytime_boundary)  {
-    //Make sure the day/night time doesn't switch back and forth in between one single day
-    //aka. there's a clear boundary between day and night
-    for(int i=0; i<50; i++)
-
-        for(int i=0; i<50; i++)
-        {
-            EventSimulator::Daytime current = EventSimulator::Daytime::DAY;
-            //Go to the day boundary
-            for(int j=24; j<35; j++){
-                EventSimulator::Daytime thisDayTime = event_->getTimeOfDay(j+i*60);
-                EXPECT_GE(thisDayTime, current);
-                current = thisDayTime;
-            }
-        }
+        EXPECT_LE(event_->getEventStart(10+i*11)%11,10);
 }
 
-TEST_F(EventSimulatorTest, multiple_instances_have_same_event_boundary)  {
-    //Test that multiple instances (a.k.a. multiple computers) have some day/night boundary
+TEST_F(EventSimulatorTest, multiple_instances_have_same_boundary)  {
+    //Test that multiple instances (a.k.a. multiple computers) have same boundary
+            std::shared_ptr<RainSimulator> event2 = std::make_shared<RainSimulator>();
+            event2->setDuration(60);
+            event2->setCycle(60);
+            event2->setRandomTime(5);
+            event2->setTiming(0.5);
     for(int i=0; i<100; i++) {
-        std::shared_ptr<EventSimulator> day2 = std::make_shared<EventSimulator>();
-        for(int i=0; i<50; i++)
-        {
-            int dayBoundary = 0;
-            int day2Boundary = 0;
-            //Go to the day boundary
-            for(int j=24; j<35; j++){
-                //if this is the first time it's not day for event_
-                if((event_->getTimeOfDay(j+i*60) != EventSimulator::Daytime::DAY) && (dayBoundary == 0))
-                    dayBoundary = j;
-                //if this is the first time it's not day for day2_
-                if((day2->getTimeOfDay(j+i*60) != EventSimulator::Daytime::DAY) && (day2Boundary == 0))
-                    day2Boundary = j;
-                //if both dayBoundaryies are determined
-                if(dayBoundary>0 && day2Boundary > 0)
-                    break;
-            }
-            EXPECT_EQ(dayBoundary, day2Boundary);
-        }
+            EXPECT_EQ(event_->getEventStart(i*60), event2->getEventStart(i*60));
     }
 }
 
-TEST(InvalidEventSimulatorTest, random_Time_too_big_in_relation_to_dayDuration)  {
-    EventSimulator day;
-    day.setDayDuration(11);
-    day.setRandomTime(6);
-    EXPECT_EQ(day.getTimeOfDay(10), EventSimulator::Daytime::NONE);
-}
-
-TEST_F(EventSimulatorTest, can_set_and_get_properties)  {
-    QSignalSpy spyDay(event_.get(), SIGNAL(dayDurationChanged(uint)));
-    QSignalSpy spyRandom(event_.get(), SIGNAL(randomTimeChanged(uint)));
-    event_->setDayDuration(11);
-    EXPECT_EQ(spyDay.count(),1);
-    event_->setRandomTime(4);
-    EXPECT_EQ(spyRandom.count(),1);
-    //Test that the parameters were set correctly
-    EXPECT_EQ(event_->getDayDuration(),11);
-    EXPECT_EQ(event_->getRandomTime(),4);
-}
-*/

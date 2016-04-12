@@ -19,6 +19,7 @@ protected:
         dbus_luminosity_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.luminosity", QDBusConnection::sessionBus());
         dbus_brightness_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.brightness", QDBusConnection::sessionBus());
         dbus_moisture_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.moisture", QDBusConnection::sessionBus());
+        dbus_warning_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.warning", QDBusConnection::sessionBus());
         if (!QDBusConnection::sessionBus().isConnected()) {
             fprintf(stderr, "Cannot connect to the D-Bus session bus.\n");
             exit(1);
@@ -31,6 +32,7 @@ protected:
     std::shared_ptr<QDBusInterface> dbus_luminosity_;
     std::shared_ptr<QDBusInterface> dbus_brightness_;
     std::shared_ptr<QDBusInterface> dbus_moisture_;
+    std::shared_ptr<QDBusInterface> dbus_warning_;
 };
 
 TEST_F(StateExchangerTest, can_get_and_set_luminosity) {
@@ -55,4 +57,12 @@ TEST_F(StateExchangerTest, can_get_and_set_moisture) {
     dbus_moisture_->setProperty("scaled", 0.5);
     EXPECT_EQ(spy.count(),1);
     EXPECT_EQ(dbus_moisture_->property("scaled"), 0.5);
+}
+
+TEST_F(StateExchangerTest, can_get_and_set_warning) {
+    QSignalSpy spy(stateexchanger_->warning().get(), SIGNAL(warningChanged(QString)));
+
+    dbus_warning_->setProperty("phrase", "This is a test");
+    EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(dbus_warning_->property("phrase"), "This is a test");
 }

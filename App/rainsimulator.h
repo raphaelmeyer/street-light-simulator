@@ -10,13 +10,13 @@
 class RainSimulator : public EventSimulator
 {
     Q_OBJECT
-    Q_PROPERTY(bool rain READ getRaining WRITE setRaining NOTIFY rainChanged)
+    Q_PROPERTY(bool rain READ getRain WRITE setRain NOTIFY rainChanged)
 public:
     explicit RainSimulator(QObject *parent = nullptr);
 
-    bool getRaining() const;
+    bool getRain() const;
 public slots:
-    void setRaining(bool value);
+    void setRain(bool value);
 signals:
     void rainChanged(bool raining);
 

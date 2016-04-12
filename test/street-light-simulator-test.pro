@@ -24,7 +24,8 @@ SOURCES += \
     daysimulator_test.cpp \
     stateexchanger_test.cpp \
     eventsimulator_test.cpp \
-    Main_TestAll.cpp
+    Main_TestAll.cpp \
+    rainsimulator_test.cpp
 
 
 

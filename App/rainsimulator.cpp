@@ -2,7 +2,7 @@
 #include <QObject>
 #include <QDebug>
 
-const int kRainCycle = 3*60;
+const int kRainCycle = 30;//3*60;
 const int kRainDuration = 15;
 
 RainSimulator::RainSimulator(QObject *parent) : EventSimulator(parent)
@@ -17,16 +17,16 @@ RainSimulator::RainSimulator(QObject *parent) : EventSimulator(parent)
 void RainSimulator::timeout() {
     uint64_t now = time(0);
     if( (getEventStart(now) < now) && (getEventEnd(now) > now))
-        setRaining(true);
+        setRain(true);
     else
-        setRaining(false);
+        setRain(false);
 }
-bool RainSimulator::getRaining() const
+bool RainSimulator::getRain() const
 {
     return raining_;
 }
 
-void RainSimulator::setRaining(bool value)
+void RainSimulator::setRain(bool value)
 {
     if(value != raining_) {
         raining_ = value;

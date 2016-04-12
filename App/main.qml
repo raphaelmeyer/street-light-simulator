@@ -39,7 +39,7 @@ ApplicationWindow {
             id: lightsource
             anchors.fill: parent
             source: "light"
-            opacity: 0
+            opacity: cppLuminosity.scaled
             fillMode: Image.PreserveAspectFit
         }
         Image{
@@ -102,13 +102,5 @@ ApplicationWindow {
         }
     }*/
 
-
-    Item {
-        id:luminosityObject
-        property double luminosity: cppLuminosity.scaled
-        onLuminosityChanged: {
-            lightsource.opacity =  luminosityObject.luminosity
-        }
-    }
 
 }

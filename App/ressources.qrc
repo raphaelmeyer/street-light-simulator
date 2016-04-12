@@ -5,5 +5,9 @@
         <file alias="auto">assets/images/auto.png</file>
         <file alias="light">assets/images/licht.png</file>
         <file alias="rain">assets/images/rain.png</file>
+        <file alias="sun">assets/images/sun.png</file>
+        <file alias="moon">assets/images/moon.gif</file>
+        <file alias="sign_inactive">assets/images/sign_inactive.jpg</file>
+        <file alias="sign_active">assets/images/sign_active.jpg</file>
     </qresource>
 </RCC>

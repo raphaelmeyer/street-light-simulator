@@ -42,6 +42,25 @@ ApplicationWindow {
             opacity: 0
             fillMode: Image.PreserveAspectFit
         }
+        Image{
+            id: sign
+            source: cppWarning.phrase === "" ? "sign_inactive" : "sign_active"
+            width: 72
+            fillMode: Image.PreserveAspectFit
+            x: 555
+            y: 320
+            Label {
+                anchors.fill: parent
+                anchors.topMargin: 20
+                text: cppWarning.phrase
+                color: "yellow"
+                maximumLineCount: 6
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                elide: Text.ElideRight
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
+
         Image {
             id: rain
             anchors.fill: parent
@@ -56,7 +75,8 @@ ApplicationWindow {
                 }
             }
         }
-        Image {
+
+        /*Image {
             id: auto
             source: "auto"
             x: (autoLocation.value)*1000
@@ -64,10 +84,10 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             width: parent.width/15 + (1-autoLocation.value)*400
             rotation: -25+(1-autoLocation.value)*25
-        }
+        }*/
     }
 
-    Slider {
+    /*Slider {
         id: autoLocation
         orientation: Qt.Horizontal
         anchors.left: parent.left
@@ -80,8 +100,7 @@ ApplicationWindow {
         onValueChanged: {
             //console.log("Value is now"+value+"auto size:"+auto.width)
         }
-
-    }
+    }*/
 
 
     Item {

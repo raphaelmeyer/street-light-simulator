@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("cppBrightness", stateexchanger.brightness().get());
     engine.rootContext()->setContextProperty("cppLuminosity", stateexchanger.luminosity().get());
     engine.rootContext()->setContextProperty("cppMoisture", stateexchanger.moisture().get());
+    engine.rootContext()->setContextProperty("cppWarning", stateexchanger.warning().get());
     engine.rootContext()->setContextProperty("cppRain", &rainSimulator);
     engine.rootContext()->setContextProperty("cppDay", &daySimulator);
 

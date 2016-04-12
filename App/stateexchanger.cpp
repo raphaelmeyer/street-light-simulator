@@ -17,8 +17,9 @@ bool StateExchanger::initialize()
     brightness_ = std::make_shared<Brightness>(this);
     luminosity_ = std::make_shared<Luminosity>(this);
     moisture_ = std::make_shared<Moisture>(this);
+    warning_ = std::make_shared<Warning>(this);
 
-    if(brightness_==nullptr || luminosity_==nullptr || moisture_==nullptr) {
+    if(brightness_==nullptr || luminosity_==nullptr || moisture_==nullptr || warning_==nullptr) {
         throw std::runtime_error("Could not create a D-Bus object");
     }
 
@@ -44,6 +45,11 @@ std::shared_ptr<Brightness> StateExchanger::brightness() const
 std::shared_ptr<Moisture> StateExchanger::moisture() const
 {
     return moisture_;
+}
+
+std::shared_ptr<Warning> StateExchanger::warning() const
+{
+    return warning_;
 }
 
 
@@ -84,5 +90,19 @@ void Moisture::setScaledMoisture(double moisture)
     if((moisture <= 1) && (moisture != moisture_)) {
         moisture_ = moisture;
         emit moistureChanged(moisture_);
+    }
+}
+
+
+QString Warning::getWarning() const
+{
+    return warning_;
+}
+
+void Warning::setWarning(QString warning)
+{
+    if(warning != warning_) {
+        warning_ = warning;
+        emit warningChanged(warning_);
     }
 }

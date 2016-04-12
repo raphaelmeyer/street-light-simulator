@@ -45,7 +45,7 @@ void DaySimulator::setDaytime(const Daytime &daytime)
 
 void DaySimulator::timeout()
 {
-    time_t now = time(0);
+    uint64_t now = time(0);
     qDebug() << "Now is: "<<now%60<<" Night start: "<<getEventStart(now)%60;
     if( (getEventStart(now) < now) && (getEventEnd(now) > now))
         setDaytime(DaySimulator::NIGHT);

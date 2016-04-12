@@ -66,4 +66,20 @@ TEST_F(DaySimulatorTest, day_only_has_one_daytime_boundary)  {
         EXPECT_EQ(day_->getEventEnd(i*60), 60+i*60);
 }
 
+//as we cannot test the timeout signal directly, check if rain changed
+//when it was set up to should have changed on timer signal
+TEST_F(DaySimulatorTest, can_get_and_set_timer_and_it_will_trigger)  {
+     QSignalSpy spy(day_.get(), SIGNAL(daytimeChanged(Daytime)));
+    std::shared_ptr<QTimer> timer = std::make_shared<QTimer>();
+    timer->stop();
+    timer->setInterval(1);
+    timer->setSingleShot(true);
+    day_->setTimer(timer);
+    day_->setRandomTime(0);
+    day_->setTiming(0);
+    timer->start();
+    usleep(1000);
+    QCoreApplication::processEvents();
+    EXPECT_EQ(spy.count(),1);
+}
 

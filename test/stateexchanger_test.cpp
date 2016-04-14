@@ -7,7 +7,7 @@
 #include <QSignalSpy>
 #include <memory>
 
-#define SERVICE_NAME "ch.bbv.streetLightSimulator"
+#define SERVICE_NAME "ch.bbv.streetlight"
 #define PATH_NAME "/ch/bbv/streetlight"
 
 class StateExchangerTest : public testing::Test {

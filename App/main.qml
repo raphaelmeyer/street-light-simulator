@@ -7,6 +7,7 @@ import com.bbv.StreetLightSimulator 1.0
 
 ApplicationWindow {
     title: qsTr("Street light simulator")
+    id: gui
     objectName: "gui"
     visible: true
     width: 1024
@@ -18,6 +19,7 @@ ApplicationWindow {
         objectName: "world"
         id: world
         anchors.fill: parent
+
         Image {
             id: streetImage
             anchors.fill: parent
@@ -64,6 +66,47 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
         }
         Image {
+            id: sun
+            source: "sun"
+            objectName: "sun"
+            fillMode: Image.PreserveAspectFit
+            width: 60
+            x: 0
+            y: 400+cppDay.nightStart%60
+            Behavior on x {
+                NumberAnimation {
+                    duration: 1000
+                }
+            }
+
+        }
+        Image {
+            id: moon
+            source: "moon"
+            objectName: "moon"
+            fillMode: Image.PreserveAspectFit
+            width: 60
+            x: 0
+            y: 400+cppDay.nightStart%60
+            visible: {
+                if((x<0) || (x>parent.width))
+                    return false;
+                else
+                    return true;
+            }
+
+            //Behavior on x {
+            NumberAnimation on x {
+                duration: 30000//(dayLength-(cppDay.nightStart%dayLength))*1000
+                from: 0
+                to: world.width
+                loops: Animation.Infinite
+            }
+            //}
+
+        }
+
+        Image {
             id: rain
             anchors.fill: parent
             source: "rain"
@@ -87,6 +130,17 @@ ApplicationWindow {
             width: parent.width/15 + (1-autoLocation.value)*400
             rotation: -25+(1-autoLocation.value)*25
         }*/
+        function calculatePosition() {
+            var now = Math.floor(new Date().getTime() / 1000)
+            var sunX = gui.width/(cppDay.nightStart%dayLength)*(now%dayLength)
+            var moonX = gui.width/(dayLength-(cppDay.nightStart%dayLength))*((now-cppDay.nightStart)%dayLength)
+            console.log("sunX is now"+sunX+" moonX is now "+moonX)
+            sun.x = sunX
+            //moon.x = moonX
+            console.log("Cal:"+(dayLength-(cppDay.nightStart%dayLength))*1000+"world width: "+world.width)
+
+        }
+
     }
 
     /*Slider {
@@ -103,6 +157,7 @@ ApplicationWindow {
             //console.log("Value is now"+value+"auto size:"+auto.width)
         }
     }*/
+
 
 
 }

@@ -24,8 +24,10 @@ int main(int argc, char *argv[])
     timer->setSingleShot(false);
     timer->start();
 
+
     rainSimulator.setTimer(timer);
     daySimulator.setTimer(timer);
+    //connect(timer, SIGNAL(timeout()), )
 
     engine.rootContext()->setContextProperty("cppBrightness", stateexchanger.brightness().get());
     engine.rootContext()->setContextProperty("cppLuminosity", stateexchanger.luminosity().get());
@@ -35,6 +37,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("cppDay", &daySimulator);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    QObject* world = engine.rootObjects().first()->findChild<QObject*>(QString("world"));
+    if(world!=nullptr)
+        QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculatePosition()));
+    else
+        qDebug() << "Couldn't find gui";
 
     return app.exec();
 }

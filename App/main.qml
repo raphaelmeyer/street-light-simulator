@@ -15,7 +15,7 @@ ApplicationWindow {
     height: 768
     property int dayLength: 60
     property double scalingFactor: (1.0*streetImage.paintedWidth)/defaultWidth
-    onScalingFactorChanged: console.log("New scaling factor "+scalingFactor)
+    //onScalingFactorChanged: console.log("New scaling factor "+scalingFactor)
     Rectangle {
         objectName: "world"
         id: world
@@ -158,8 +158,8 @@ ApplicationWindow {
                 moon.visible = true
                 cppBrightness.scaled = 0.1*(1-Math.abs(moonX/maxOffset))
             }
-            console.log("sunX is now "+sunX+" moonX is now "+moonX)
-            console.log("Brightness is "+cppBrightness.scaled)
+            //console.log("sunX is now "+sunX+" moonX is now "+moonX)
+            //console.log("Brightness is "+cppBrightness.scaled)
             sun.anchors.horizontalCenterOffset = sunX
             moon.anchors.horizontalCenterOffset = moonX
         }

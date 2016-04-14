@@ -37,13 +37,6 @@ ApplicationWindow {
                 }
             }
         }
-        Image {
-            id: lightsource
-            anchors.fill: parent
-            source: "light"
-            opacity: cppLuminosity.scaled
-            fillMode: Image.PreserveAspectFit
-        }
         Image{
             id: sign
             source: cppWarning.phrase === "" ? "sign_inactive" : "sign_active"
@@ -63,7 +56,13 @@ ApplicationWindow {
                 horizontalAlignment: Text.AlignHCenter
             }
         }
-
+        Image {
+            id: lightsource
+            anchors.fill: parent
+            source: "light"
+            opacity: cppLuminosity.scaled
+            fillMode: Image.PreserveAspectFit
+        }
         Image {
             id: rain
             anchors.fill: parent

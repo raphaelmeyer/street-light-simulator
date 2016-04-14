@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     QObject* world = engine.rootObjects().first()->findChild<QObject*>(QString("world"));
     if(world!=nullptr)
-        QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculatePosition()));
+        QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculateCelestialPositions()));
     else
         qDebug() << "Couldn't find gui";
 

@@ -10,10 +10,11 @@ ApplicationWindow {
     id: gui
     objectName: "gui"
     visible: true
-    width: 1024
+    property int defaultWidth: 1024
+    width: defaultWidth
     height: 768
     property int dayLength: 60
-    property double scalingFactor: (1.0*streetImage.paintedWidth)/1024
+    property double scalingFactor: (1.0*streetImage.paintedWidth)/defaultWidth
     onScalingFactorChanged: console.log("New scaling factor "+scalingFactor)
     Rectangle {
         objectName: "world"
@@ -30,11 +31,9 @@ ApplicationWindow {
                 onDaytimeChanged: {
                     if(cppDay.daytime === DaySimulator.DAY) {
                         streetImage.source = "strasse_tag"
-                        cppBrightness.scaled = 1
                     }
                     else {
                         streetImage.source = "strasse_nacht"
-                        cppBrightness.scaled = 0
                     }
                 }
             }
@@ -69,41 +68,32 @@ ApplicationWindow {
             id: sun
             source: "sun"
             objectName: "sun"
+            anchors.horizontalCenter: streetImage.horizontalCenter
+            anchors.verticalCenter: streetImage.verticalCenter
+            anchors.verticalCenterOffset: -300*scalingFactor
             fillMode: Image.PreserveAspectFit
-            width: 60
-            x: 0
-            y: 400+cppDay.nightStart%60
-            Behavior on x {
+            width: 60 * scalingFactor
+            Behavior on anchors.horizontalCenterOffset {
                 NumberAnimation {
                     duration: 1000
                 }
             }
-
         }
         Image {
             id: moon
             source: "moon"
             objectName: "moon"
             fillMode: Image.PreserveAspectFit
-            width: 60
-            x: 0
-            y: 400+cppDay.nightStart%60
-            visible: {
-                if((x<0) || (x>parent.width))
-                    return false;
-                else
-                    return true;
+            width: 60*scalingFactor
+            visible: false
+            anchors.verticalCenter: streetImage.verticalCenter
+            anchors.verticalCenterOffset: -300*scalingFactor
+            anchors.horizontalCenter: streetImage.horizontalCenter
+            Behavior on anchors.horizontalCenterOffset {
+                NumberAnimation {
+                    duration: 1000
+                }
             }
-
-            //Behavior on x {
-            NumberAnimation on x {
-                duration: 30000//(dayLength-(cppDay.nightStart%dayLength))*1000
-                from: 0
-                to: world.width
-                loops: Animation.Infinite
-            }
-            //}
-
         }
 
         Image {
@@ -130,34 +120,49 @@ ApplicationWindow {
             width: parent.width/15 + (1-autoLocation.value)*400
             rotation: -25+(1-autoLocation.value)*25
         }*/
-        function calculatePosition() {
-            var now = Math.floor(new Date().getTime() / 1000)
-            var sunX = gui.width/(cppDay.nightStart%dayLength)*(now%dayLength)
-            var moonX = gui.width/(dayLength-(cppDay.nightStart%dayLength))*((now-cppDay.nightStart)%dayLength)
-            console.log("sunX is now"+sunX+" moonX is now "+moonX)
-            sun.x = sunX
-            //moon.x = moonX
-            console.log("Cal:"+(dayLength-(cppDay.nightStart%dayLength))*1000+"world width: "+world.width)
+        /*Slider {
+            id: autoLocation
+            orientation: Qt.Horizontal
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
 
+            anchors.bottom: parent.bottom
+
+            onValueChanged: {
+                //console.log("Value is now"+value+"auto size:"+auto.width)
+            }
+        }*/
+
+        function calculateCelestialPositions() {
+            var now = Math.floor(new Date().getTime() / 1000)
+            var maxOffset = scalingFactor*defaultWidth/2
+            var sunX = scalingFactor*defaultWidth*(((now%dayLength)/(cppDay.nightStart%dayLength))-1/2)
+            var moonX = defaultWidth*scalingFactor*(((now%dayLength-cppDay.nightStart%60)/(60-(cppDay.nightStart%dayLength)-1))-1/2)
+
+            if( Math.abs(sunX) > maxOffset) {
+                sunX = -(sun.paintedWidth/2+maxOffset)
+                sun.visible = false
+            }
+            else {
+                sun.visible = true
+                cppBrightness.scaled = 1-Math.abs(sunX/maxOffset)
+            }
+
+            if(Math.abs(moonX) > maxOffset) {
+                moonX = -(moon.paintedWidth/2+maxOffset)
+                moon.visible = false
+            }
+            else {
+                moon.visible = true
+                cppBrightness.scaled = 0.1*(1-Math.abs(moonX/maxOffset))
+            }
+            console.log("sunX is now "+sunX+" moonX is now "+moonX)
+            console.log("Brightness is "+cppBrightness.scaled)
+            sun.anchors.horizontalCenterOffset = sunX
+            moon.anchors.horizontalCenterOffset = moonX
         }
 
     }
-
-    /*Slider {
-        id: autoLocation
-        orientation: Qt.Horizontal
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
-
-        anchors.bottom: parent.bottom
-
-        onValueChanged: {
-            //console.log("Value is now"+value+"auto size:"+auto.width)
-        }
-    }*/
-
-
-
 }

@@ -8,14 +8,16 @@ import com.bbv.StreetLightSimulator 1.0
 ApplicationWindow {
     title: qsTr("Street light simulator")
     objectName: "gui"
-    //width: 1024
-    //height: 768
     visible: true
-
+    width: 1024
+    height: 768
+    property int dayLength: 60
+    property double scalingFactor: (1.0*streetImage.paintedWidth)/1024
+    onScalingFactorChanged: console.log("New scaling factor "+scalingFactor)
     Rectangle {
-        width: 1024
-        height: 768
-
+        objectName: "world"
+        id: world
+        anchors.fill: parent
         Image {
             id: streetImage
             anchors.fill: parent
@@ -45,10 +47,11 @@ ApplicationWindow {
         Image{
             id: sign
             source: cppWarning.phrase === "" ? "sign_inactive" : "sign_active"
-            width: 72
+            width: 72*scalingFactor
             fillMode: Image.PreserveAspectFit
-            x: 555
-            y: 320
+            anchors.verticalCenter: streetImage.verticalCenter
+            anchors.horizontalCenter: streetImage.horizontalCenter
+            anchors.horizontalCenterOffset: 80*scalingFactor
             Label {
                 anchors.fill: parent
                 anchors.topMargin: 20

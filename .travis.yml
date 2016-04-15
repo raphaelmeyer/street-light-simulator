@@ -11,6 +11,7 @@ before_install:
 
 install:
   - sudo apt-get -y install qt55-meta-full
+  - sudo apt-get -y install doxygen
 
 script:
   - source /opt/qt55/bin/qt55-env.sh
@@ -22,6 +23,8 @@ script:
   - /opt/qt55/bin/qmake
   - make
   - dbus-launch ./street-light-simulator-test
+  - cd ..
+  - doxygen doxygen.xml
 
 after_success:
     - cd ../App

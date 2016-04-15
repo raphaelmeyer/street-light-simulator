@@ -12,3 +12,4 @@ street-light-simulator-test
 *travis.log
 *.gcda
 *.gcov
+doc/**

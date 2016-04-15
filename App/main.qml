@@ -68,16 +68,17 @@ ApplicationWindow {
             id: sun
             source: "sun"
             objectName: "sun"
+            visible: cppDay.daytime === DaySimulator.DAY
             anchors.horizontalCenter: streetImage.horizontalCenter
             anchors.verticalCenter: streetImage.verticalCenter
-            anchors.verticalCenterOffset: -300*scalingFactor
             fillMode: Image.PreserveAspectFit
             width: 60 * scalingFactor
-            Behavior on anchors.horizontalCenterOffset {
-                NumberAnimation {
-                    duration: 1000
-                }
-            }
+            Behavior on anchors.horizontalCenterOffset  {NumberAnimation { duration: 1000 } }
+            Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 1000 } }
+        }
+        NumberAnimation {
+            id: animation
+            duration: 1000
         }
         Image {
             id: moon
@@ -85,15 +86,11 @@ ApplicationWindow {
             objectName: "moon"
             fillMode: Image.PreserveAspectFit
             width: 60*scalingFactor
-            visible: false
+            visible: cppDay.daytime === DaySimulator.NIGHT
             anchors.verticalCenter: streetImage.verticalCenter
-            anchors.verticalCenterOffset: -300*scalingFactor
             anchors.horizontalCenter: streetImage.horizontalCenter
-            Behavior on anchors.horizontalCenterOffset {
-                NumberAnimation {
-                    duration: 1000
-                }
-            }
+            Behavior on anchors.horizontalCenterOffset  {NumberAnimation { duration: 1000 } }
+            Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 1000 } }
         }
 
         Image {
@@ -138,28 +135,24 @@ ApplicationWindow {
         function calculateCelestialPositions() {
             var now = Math.floor(new Date().getTime() / 1000)
             var maxOffset = scalingFactor*defaultWidth/2
-            var sunX = scalingFactor*defaultWidth*(((now%dayLength)/(cppDay.nightStart%dayLength))-1/2)
-            var moonX = defaultWidth*scalingFactor*(((now%dayLength-cppDay.nightStart%60)/(60-(cppDay.nightStart%dayLength)-1))-1/2)
+            var dayProgress = Math.min((now%dayLength)/(cppDay.nightStart%dayLength),1)
+            var nightProgress = Math.max((now%dayLength-cppDay.nightStart%60)/(60-(cppDay.nightStart%dayLength)),0)
+            console.log("Day progress: "+dayProgress+ " Night progress: "+nightProgress)
+            var sunX = (scalingFactor*defaultWidth+sun.width)*((dayProgress)-1/2)
+            var sunY = scalingFactor*(-(Math.sin(dayProgress*Math.PI)*200)-150)
+            var moonX = (defaultWidth*scalingFactor+moon.width)*((nightProgress)-1/2)
+            var moonY = scalingFactor*(-(Math.sin(nightProgress*Math.PI)*200)-150)
 
-            if( Math.abs(sunX) > maxOffset) {
-                sunX = -(sun.paintedWidth/2+maxOffset)
-                sun.visible = false
-            }
-            else {
-                sun.visible = true
-            }
+            //force sun to the left when it invisible in the night
+            if(cppDay.daytime === DaySimulator.NIGHT)
+                sunX = -(maxOffset+sun.width/2)
 
-            if(Math.abs(moonX) > maxOffset) {
-                moonX = -(moon.paintedWidth/2+maxOffset)
-                moon.visible = false
-            }
-            else {
-                moon.visible = true
-            }
             //console.log("sunX is now "+sunX+" moonX is now "+moonX)
             //console.log("Brightness is "+cppBrightness.scaled)
             sun.anchors.horizontalCenterOffset = sunX
+            sun.anchors.verticalCenterOffset = sunY
             moon.anchors.horizontalCenterOffset = moonX
+            moon.anchors.verticalCenterOffset = moonY
         }
 
         function calculateBrightness() {
@@ -168,7 +161,7 @@ ApplicationWindow {
             if(cppDay.daytime === DaySimulator.DAY)
                 brightness = 1-Math.min(Math.abs(sun.anchors.horizontalCenterOffset/maxOffset),1)
             else
-                 brightness= 0.1*(1-Math.min(Math.abs(moon.anchors.horizontalCenterOffset/maxOffset),1))
+                brightness= 0.1*(1-Math.min(Math.abs(moon.anchors.horizontalCenterOffset/maxOffset),1))
 
             if(cppRain.rain === true)
                 brightness *= 0.8

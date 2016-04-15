@@ -147,7 +147,6 @@ ApplicationWindow {
             }
             else {
                 sun.visible = true
-                cppBrightness.scaled = 1-Math.abs(sunX/maxOffset)
             }
 
             if(Math.abs(moonX) > maxOffset) {
@@ -156,12 +155,25 @@ ApplicationWindow {
             }
             else {
                 moon.visible = true
-                cppBrightness.scaled = 0.1*(1-Math.abs(moonX/maxOffset))
             }
             //console.log("sunX is now "+sunX+" moonX is now "+moonX)
             //console.log("Brightness is "+cppBrightness.scaled)
             sun.anchors.horizontalCenterOffset = sunX
             moon.anchors.horizontalCenterOffset = moonX
+        }
+
+        function calculateBrightness() {
+            var brightness
+            var maxOffset = scalingFactor*defaultWidth/2
+            if(cppDay.daytime === DaySimulator.DAY)
+                brightness = 1-Math.min(Math.abs(sun.anchors.horizontalCenterOffset/maxOffset),1)
+            else
+                 brightness= 0.1*(1-Math.min(Math.abs(moon.anchors.horizontalCenterOffset/maxOffset),1))
+
+            if(cppRain.rain === true)
+                brightness *= 0.8
+
+            cppBrightness.scaled = brightness
         }
 
     }

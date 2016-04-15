@@ -8,7 +8,7 @@ EventSimulator::EventSimulator(QObject *parent) : QObject(parent)
     random_ = std::make_shared<std::uniform_int_distribution<int>>(-1*randomTime_, randomTime_);
 
 }
-void EventSimulator::setRandomTime(uint randomTime)
+void EventSimulator::setRandomTime(const uint &randomTime)
 {
     if(randomTime_ != randomTime)
     {
@@ -113,7 +113,7 @@ float EventSimulator::getTiming() const
     return timing_;
 }
 
-void EventSimulator::setTiming(float timing)
+void EventSimulator::setTiming(const float &timing)
 {
     if((timing != timing_) && (timing <= 1.0) && (timing >= 0)) {
         timing_ = timing;

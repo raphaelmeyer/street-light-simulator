@@ -19,36 +19,45 @@
 ///Simulates a day/night cycle for times
 class DaySimulator : public EventSimulator
 {
-    Q_OBJECT
+  Q_OBJECT
+    ///The daytime property which holds if it is day or night
     Q_PROPERTY(Daytime daytime READ getDaytime WRITE setDaytime NOTIFY daytimeChanged)
+    /// Holds when the night will start for the last (on timeout) calculated cycle
     Q_PROPERTY(quint64 nightStart READ getNightStart NOTIFY nightStartChanged)
-public:
+  public:
+    ///Daytime enumeration, tells if it is DAY (bright outside) or night. NONE is typically not used
     enum Daytime {DAY, NIGHT, NONE};
     Q_ENUM(Daytime)
-    ///Constructor
-/// @param dayDuration How long a day shall be in seconds
-/// @param randomTime How much the day/night cycle should be ranodm
-    //explicit DaySimulator(int dayDuration, int randomTime, QObject *parent = nullptr);
-    explicit DaySimulator(QObject *parent = nullptr);
+      ///Constructor
+      explicit DaySimulator(QObject *parent = nullptr);
 
+    /// Sets the random Time of the day, e.g. how much day/night shall be random
     void setRandomTime(uint randomTime);
+    /// Sets the cycle length of the day, e.g. how long one "24hour day" (day plus night) shall be
     void setCycle(uint cycle);
+    ///Returns the current status of fthe daytime variable
     Daytime getDaytime() const;
+    ///Returns when the night will start for the last calculated cycle
     uint64_t getNightStart() const;
-public slots:
-    void setDaytime(const Daytime &daytime);
+    public slots:
+      ///Set the Daytime
+      void setDaytime(const Daytime &daytime);
 signals:
+    ///Signals that the daytime has changed (typically in timeout)
     void daytimeChanged(Daytime daytime);
+    ///Signals that we calculated a new nightStart (typically in timeout)
     void nightStartChanged(uint64_t nightStart);
 
-private slots:
-    virtual void timeout();
+    private slots:
+      ///Internal timeout slot to be called by timer
+      virtual void timeout();
 
-private:
+  private:
+    //!< set The nightstart, called by internal calculation
     void setNightStart(uint64_t nightStart);
-    Daytime daytime_{Daytime::DAY};
-    uint64_t nightStart_{0};
-    std::shared_ptr<QTimer> timer_;
+    Daytime daytime_{Daytime::DAY}; //!< Internal variable to keep track of daytime
+    uint64_t nightStart_{0}; //!< Internal variable to keep track when the night will start for last (typically on timeout) calculated cycle
+    std::shared_ptr<QTimer> timer_; //!< Internal variable to timer on whose timeout signal to react
 };
 
 #endif // DAYSIMULATOR_H

@@ -23,7 +23,7 @@ class RainSimulator : public EventSimulator
     bool getRain() const;
     public slots:
       /** Sets the rain status
-      /*  @param rain status, true if it is raining
+      *  @param rain status, true if it is raining
       */
       void setRain(bool value);
 signals:

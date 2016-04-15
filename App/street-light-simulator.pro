@@ -32,7 +32,6 @@ RESOURCES += qml.qrc \
 
 HEADERS += \
     daysimulator.h \
-    timeprovider.h \
     stateexchanger.h \
     dbusobject.h \
     eventsimulator.h \

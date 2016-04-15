@@ -6,7 +6,6 @@ addons:
     paths:
       - doc
     target-paths: doc/
-    debug: true
 
 before_install:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty

@@ -2,7 +2,7 @@
 #include <QObject>
 #include <QDebug>
 
-const int kRainCycle = 30;//3*60;
+const int kRainCycle = 3*60;
 const int kRainDuration = 15;
 
 RainSimulator::RainSimulator(QObject *parent) : EventSimulator(parent)

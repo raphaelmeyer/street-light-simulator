@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
+import QtQuick.Particles 2.0
 
 import com.bbv.StreetLightSimulator 1.0
 
@@ -15,6 +16,7 @@ ApplicationWindow {
     height: 768
     property int dayLength: 60
     property double scalingFactor: (1.0*streetImage.paintedWidth)/defaultWidth
+    property var car
     //onScalingFactorChanged: console.log("New scaling factor "+scalingFactor)
     Rectangle {
         objectName: "world"
@@ -26,6 +28,8 @@ ApplicationWindow {
             anchors.fill: parent
             source: "strasse_tag"
             fillMode: Image.PreserveAspectFit
+            //fillMode: Image.Stretch
+
             Connections {
                 target: cppDay
                 onDaytimeChanged: {
@@ -108,36 +112,73 @@ ApplicationWindow {
             }
         }
 
-        /*Image {
-            id: auto
-            source: "auto"
-            x: (autoLocation.value)*1000
-            y: 420 + (1-autoLocation.value)*100
-            fillMode: Image.PreserveAspectFit
-            width: parent.width/15 + (1-autoLocation.value)*400
-            rotation: -25+(1-autoLocation.value)*25
-        }*/
-        /*Slider {
-            id: autoLocation
-            orientation: Qt.Horizontal
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 5
-            anchors.rightMargin: 5
-
-            anchors.bottom: parent.bottom
-
-            onValueChanged: {
-                //console.log("Value is now"+value+"auto size:"+auto.width)
+        ParticleSystem {
+            id: carParticles
+            anchors.fill: streetImage
+            //anchors.horizontalCenter: streetImage.horizontalCenter
+            ImageParticle {
+                id: car
+                source: "car"
+                groups: ["car"]
+                colorVariation: 1
             }
-        }*/
+            ImageParticle {
+                id: smokeParticle
+                source: "smoke"
+                //system: particles
+                groups: ["smoke"]
+                rotationVariation: 180
+            }
+
+
+            Emitter {
+                id: carRight
+                group: "car"
+                property int carVelocity: 200*scalingFactor
+                height: 1
+                x: (gui.width-streetImage.paintedWidth)/2+streetImage.paintedWidth
+                y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-80*scalingFactor
+                //Just one car at a time
+                emitRate: 1/(streetImage.paintedWidth/carVelocity)
+                lifeSpan: (streetImage.paintedWidth/carVelocity)*1000//15000
+                velocity: PointDirection { x: -carRight.carVelocity}
+
+                size: 300*scalingFactor
+
+                //onEmitParticles is called repeatedly,
+                //but the array will only have content if there is a new car
+                onEmitParticles: {
+                    for(var i=0; i<particles.length; i++)  {
+                        var particle = particles[i]
+                        world.newCar(particle)
+                    }
+                }
+            }
+
+            Wander {
+                yVariance: 20*scalingFactor;
+                pace: 500;
+                groups: ["car"]
+            }
+            TrailEmitter {
+                id: smoke
+                x: 130 * scalingFactor
+                y: 15 * scalingFactor
+                group: "smoke"
+                follow: "car"
+                emitRatePerParticle: 3
+                lifeSpan: 1000
+                velocity: PointDirection { y: -30*scalingFactor}
+                sizeVariation: 10
+            }
+        }
 
         function calculateCelestialPositions() {
             var now = Math.floor(new Date().getTime() / 1000)
             var maxOffset = scalingFactor*defaultWidth/2
             var dayProgress = Math.min((now%dayLength)/(cppDay.nightStart%dayLength),1)
             var nightProgress = Math.max((now%dayLength-cppDay.nightStart%60)/(60-(cppDay.nightStart%dayLength)),0)
-            console.log("Day progress: "+dayProgress+ " Night progress: "+nightProgress)
+            //console.log("Day progress: "+dayProgress+ " Night progress: "+nightProgress)
             var sunX = (scalingFactor*defaultWidth+sun.width)*((dayProgress)-1/2)
             var sunY = scalingFactor*(-(Math.sin(dayProgress*Math.PI)*200)-150)
             var moonX = (defaultWidth*scalingFactor+moon.width)*((nightProgress)-1/2)
@@ -153,6 +194,8 @@ ApplicationWindow {
             sun.anchors.verticalCenterOffset = sunY
             moon.anchors.horizontalCenterOffset = moonX
             moon.anchors.verticalCenterOffset = moonY
+
+            //console.log("World width: "+gui.width+"Image width:"+streetImage.paintedWidth+"calc:"+(world.width-streetImage.paintedWidth)/2)
         }
 
         function calculateBrightness() {
@@ -168,6 +211,29 @@ ApplicationWindow {
 
             cppBrightness.scaled = brightness
         }
+        function updateCarDistance() {
+            //Construct for multiple cars in an array:
+/*            var minDistance = 1
+            for(var i=0; i<car.length; i++) {
+                if(car[i].x)
+                    console.log("This car: "+car[i].id)
+                else
+                    car.splice(i,i+1)
+                var distance =  Math.min(1,Math.max(-1,(car[i].x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
 
+                if(Math.abs(distance)<Math.abs(minDistance)) {
+                    minDistance = distance
+                }
+            }*/
+            if(gui.car === undefined)
+                return
+            var distance =  Math.min(1,Math.max(-1,(gui.car.x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
+            cppDistance.distance = distance
+            //console.log("Car is now at "+cppDistance.distance)
+        }
+
+        function newCar(car) {
+            gui.car = car
+        }
     }
 }

@@ -1,6 +1,7 @@
 #include "daysimulator.h"
 #include "stateexchanger.h"
 #include "rainsimulator.h"
+#include "carsimulator.h"
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
@@ -19,21 +20,29 @@ int main(int argc, char *argv[])
 
     RainSimulator rainSimulator;
     DaySimulator daySimulator;
+    CarSimulator carSimulator;
     std::shared_ptr<QTimer> timer = std::make_shared<QTimer>();
     timer->setInterval(1000);
     timer->setSingleShot(false);
     timer->start();
+    std::shared_ptr<QTimer> fastTimer = std::make_shared<QTimer>();
+    fastTimer->setInterval(100);
+    fastTimer->setSingleShot(false);
+    fastTimer->start();
 
 
     rainSimulator.setTimer(timer);
     daySimulator.setTimer(timer);
+    carSimulator.setTimer(timer);
     //connect(timer, SIGNAL(timeout()), )
 
     engine.rootContext()->setContextProperty("cppBrightness", stateexchanger.brightness().get());
     engine.rootContext()->setContextProperty("cppLuminosity", stateexchanger.luminosity().get());
     engine.rootContext()->setContextProperty("cppMoisture", stateexchanger.moisture().get());
     engine.rootContext()->setContextProperty("cppWarning", stateexchanger.warning().get());
+    engine.rootContext()->setContextProperty("cppDistance", stateexchanger.distance().get());
     engine.rootContext()->setContextProperty("cppRain", &rainSimulator);
+    engine.rootContext()->setContextProperty("cppCar", &carSimulator);
     engine.rootContext()->setContextProperty("cppDay", &daySimulator);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
@@ -43,6 +52,8 @@ int main(int argc, char *argv[])
     {
         QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculateCelestialPositions()));
         QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculateBrightness()));
+        QObject::connect(fastTimer.get(),SIGNAL(timeout()), world, SLOT(updateCarDistance()));
+       // QObject::connect(carSimulator, SIGNAL(carApproaching()),world, SLOT(simulateCar()));
     }
     else
     {

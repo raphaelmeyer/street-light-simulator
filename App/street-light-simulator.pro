@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     dbusobject.cpp \
     stateexchanger.cpp \
     eventsimulator.cpp \
-    rainsimulator.cpp
+    rainsimulator.cpp \
+    carsimulator.cpp
 
 RESOURCES += qml.qrc \
     ressources.qrc
@@ -35,4 +36,5 @@ HEADERS += \
     stateexchanger.h \
     dbusobject.h \
     eventsimulator.h \
-    rainsimulator.h
+    rainsimulator.h \
+    carsimulator.h

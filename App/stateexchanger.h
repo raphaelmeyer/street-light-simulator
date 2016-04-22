@@ -112,6 +112,30 @@ signals:
     QString warning_; //!< The Warning at our sign of our simulated environment
 };
 
+class Distance : public DBusObject
+{
+  Q_OBJECT
+    ///Define the interface
+    Q_CLASSINFO("D-Bus Interface", "ch.bbv.distance")
+    /// The phrase which the sign will hold
+    Q_PROPERTY(double distance READ getDistance WRITE setDistance NOTIFY distanceChanged())
+  public:
+    ///Constructor
+    Distance(QObject *application) : DBusObject(application) {}
+
+    ///Returns the distance of our lamp
+    float getDistance() const;
+    ///Sets the distance of our lamp
+    void setDistance(float distance);
+
+signals:
+    ///Signals that the distance phrase has changed
+    void distanceChanged(double distance);
+
+  private:
+    float distance_; //!< The Distance at our sign of our simulated environment
+};
+
 ///Exchanges the state of the street-light over D-Bus
 class StateExchanger : public QObject
 {
@@ -128,8 +152,10 @@ class StateExchanger : public QObject
     std::shared_ptr<Luminosity> luminosity() const;
     ///Return the moisture instance of this instance
     std::shared_ptr<Moisture> moisture() const;
-    ///Return the moisture instance of this instance
+    ///Return the warning instance of this instance
     std::shared_ptr<Warning> warning() const;
+    ///Return the distance instance of this instance
+    std::shared_ptr<Distance> distance() const;
 
     public slots:
       ///Initialize the StateExchanger, has to be called before use of d-bus functionality
@@ -139,7 +165,8 @@ class StateExchanger : public QObject
     std::shared_ptr<Brightness> brightness_; //!< Pointer to a brightness sensor instance
     std::shared_ptr<Luminosity> luminosity_; //!< Pointer to the luminosity instance of this lamp
     std::shared_ptr<Moisture> moisture_; //!< Pointer to the luminosity instance of this lamp
-    std::shared_ptr<Warning> warning_; //!< Pointer to the luminosity instance of this lamp
+    std::shared_ptr<Warning> warning_; //!< Pointer to the warning instance of this lamp
+    std::shared_ptr<Distance> distance_; //!< Pointer to the distance instance of this lamp
 };
 
 #endif // STATEEXCHANGER_H

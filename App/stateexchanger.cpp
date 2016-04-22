@@ -18,8 +18,9 @@ bool StateExchanger::initialize()
     luminosity_ = std::make_shared<Luminosity>(this);
     moisture_ = std::make_shared<Moisture>(this);
     warning_ = std::make_shared<Warning>(this);
+    distance_ = std::make_shared<Distance>(this);
 
-    if(brightness_==nullptr || luminosity_==nullptr || moisture_==nullptr || warning_==nullptr) {
+    if(brightness_==nullptr || luminosity_==nullptr || moisture_==nullptr || warning_==nullptr || distance_==nullptr) {
         throw std::runtime_error("Could not create a D-Bus object");
     }
 
@@ -52,6 +53,10 @@ std::shared_ptr<Warning> StateExchanger::warning() const
     return warning_;
 }
 
+std::shared_ptr<Distance> StateExchanger::distance() const
+{
+    return distance_;
+}
 
 double Brightness::getScaledBrightness() const
 {
@@ -104,5 +109,18 @@ void Warning::setWarning(QString warning)
     if(warning != warning_) {
         warning_ = warning;
         emit warningChanged(warning_);
+    }
+}
+
+float Distance::getDistance() const
+{
+    return distance_;
+}
+
+void Distance::setDistance(float distance)
+{
+    if(distance != distance_) {
+    distance_ = distance;
+    emit distanceChanged(distance_);
     }
 }

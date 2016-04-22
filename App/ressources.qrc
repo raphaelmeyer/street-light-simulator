@@ -10,5 +10,6 @@
         <file alias="sign_inactive">assets/images/sign_inactive.jpg</file>
         <file alias="sign_active">assets/images/sign_active.jpg</file>
         <file alias="smoke">assets/images/smoke.png</file>
+        <file alias="raindrop">assets/images/raindrop.png</file>
     </qresource>
 </RCC>

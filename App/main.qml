@@ -97,7 +97,7 @@ ApplicationWindow {
             Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 1000 } }
         }
 
-        ParticleSystem {
+        /*ParticleSystem {
             id: rainParticles
             anchors.fill: streetImage
             z: 1
@@ -134,18 +134,11 @@ ApplicationWindow {
                     }
                 }
             }
-        }
+        }*/
 
         ParticleSystem {
             id: carParticles
             anchors.fill: streetImage
-            //anchors.horizontalCenter: streetImage.horizontalCenter
-            ImageParticle {
-                id: car
-                source: "car"
-                groups: ["car"]
-                colorVariation: 1
-            }
             ImageParticle {
                 id: smokeParticle
                 source: "smoke"
@@ -153,7 +146,59 @@ ApplicationWindow {
                 groups: ["smoke"]
                 rotationVariation: 180
             }
+            Sprite {
+                id: randomSprite
+                frameDuration: 1
+                name: "randomSprite"
+                source: "car"
+                frameY: 1
+                frameX: 1
+                frameWidth: 1
+                frameHeight: 1
+                frameCount: 1
+                //How often one particular image shall travel over the display
+                to: {"carSprite":70,"traktorSprite":28, "ufoSprite":2 }
+            }
 
+            Sprite {
+                id: traktorSprite
+                name: "traktorSprite"
+                source: "car"
+                frameY: 600
+                frameX: 1*600
+                frameWidth: 600
+                frameHeight: 600
+                frameCount: 1
+                frameDuration: 20000
+            }
+            Sprite {
+                id: carSprite
+                name: "carSprite"
+                source: "car"
+                frameY: 0*600
+                frameX: 0
+                frameWidth: 600
+                frameHeight: 600
+                                frameDuration: 20000
+                frameCount: 1
+            }
+            Sprite {
+                id: ufoSprite
+                name: "ufoSprite"
+                source: "car"
+                frameY: 600
+                frameX: 2*600
+                frameWidth: 600
+                frameHeight: 600
+                frameCount: 1
+                frameDuration: 20000
+            }
+
+            ImageParticle {
+                id: car
+                sprites: [randomSprite, carSprite, traktorSprite, ufoSprite ]
+                groups: ["car"]
+            }
 
             Emitter {
                 id: carRight
@@ -161,9 +206,10 @@ ApplicationWindow {
                 property int carVelocity: 200*scalingFactor
                 height: 1
                 x: (gui.width-streetImage.paintedWidth)/2+streetImage.paintedWidth
-                y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-80*scalingFactor
+                y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-200*scalingFactor
                 //Just one car at a time
                 emitRate: 1/(streetImage.paintedWidth/carVelocity)
+                maximumEmitted: 1
                 lifeSpan: (streetImage.paintedWidth/carVelocity)*1000//15000
                 velocity: PointDirection { x: -carRight.carVelocity}
 
@@ -186,14 +232,49 @@ ApplicationWindow {
             }
             TrailEmitter {
                 id: smoke
-                x: 130 * scalingFactor
-                y: 15 * scalingFactor
+                x: 150 * scalingFactor
+                y: 110 * scalingFactor
                 group: "smoke"
                 follow: "car"
                 emitRatePerParticle: 3
                 lifeSpan: 1000
                 velocity: PointDirection { y: -30*scalingFactor}
                 sizeVariation: 10
+            }
+
+            ImageParticle {
+                id: raindrop
+                source: "raindrop"
+                alphaVariation: 0.8
+                rotation: -90
+                autoRotation: true
+            }
+            Emitter {
+                id: rainEmitter
+                enabled: false
+                x: (gui.width-streetImage.paintedWidth)/2-400*scalingFactor
+                y: 0
+                width: streetImage.paintedWidth+400*scalingFactor
+                emitRate: 100
+                lifeSpan: 10000
+                size: 20*scalingFactor
+                sizeVariation: 10*scalingFactor
+                velocity: PointDirection { x: 100*scalingFactor; y: 150*scalingFactor; yVariation: 50*scalingFactor}
+                acceleration: PointDirection {y: 150*scalingFactor; yVariation: 100*scalingFactor}
+            }
+
+            Connections {
+                target: cppRain
+                onRainChanged: {
+                    if(cppRain.rain==true) {
+                        rainEmitter.enabled = true
+                        cppMoisture.scaled = 1.0;
+                    }
+                    else {
+                        rainEmitter.enabled = false
+                        cppMoisture.scaled = 0.0
+                    }
+                }
             }
         }
 
@@ -237,7 +318,7 @@ ApplicationWindow {
         }
         function updateCarDistance() {
             //Construct for multiple cars in an array:
-/*            var minDistance = 1
+            /*            var minDistance = 1
             for(var i=0; i<car.length; i++) {
                 if(car[i].x)
                     console.log("This car: "+car[i].id)

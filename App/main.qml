@@ -316,25 +316,25 @@ ApplicationWindow {
 
             cppBrightness.scaled = brightness
         }
-        function updateCarDistance() {
+        function updateCarProximity() {
             //Construct for multiple cars in an array:
-            /*            var minDistance = 1
+            /*            var minProximity = 1
             for(var i=0; i<car.length; i++) {
                 if(car[i].x)
                     console.log("This car: "+car[i].id)
                 else
                     car.splice(i,i+1)
-                var distance =  Math.min(1,Math.max(-1,(car[i].x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
+                var proximity =  Math.min(1,Math.max(-1,(car[i].x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
 
-                if(Math.abs(distance)<Math.abs(minDistance)) {
-                    minDistance = distance
+                if(Math.abs(proximity)<Math.abs(minProximity)) {
+                    minProximity = proximity
                 }
             }*/
             if(gui.car === undefined)
                 return
-            var distance =  Math.min(1,Math.max(-1,(gui.car.x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
-            cppDistance.distance = distance
-            //console.log("Car is now at "+cppDistance.distance)
+            var proximity =  Math.min(1,Math.max(-1,(gui.car.x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
+            cppProximity.proximity = proximity
+            //console.log("Car is now at "+cppProximity.proximity)
         }
 
         function newCar(car) {

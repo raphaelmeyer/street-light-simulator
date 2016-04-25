@@ -65,7 +65,7 @@ double Brightness::getScaledBrightness() const
 
 void Brightness::setScaledBrightness(double brightness)
 {
-    if((brightness <= 1) && (brightness != brightness_)) {
+    if((brightness <= 1) && (brightness >= 0) && (brightness != brightness_)) {
         brightness_ = brightness;
         emit brightnessChanged(brightness_);
     }
@@ -78,7 +78,7 @@ double Luminosity::getScaledLuminosity() const
 
 void Luminosity::setScaledLuminosity(double luminosity)
 {
-    if((luminosity <= 1) && (luminosity != luminosity_)) {
+    if((luminosity <= 1) && (luminosity >= 0) && (luminosity != luminosity_)) {
         luminosity_ = luminosity;
         emit luminosityChanged(luminosity_);
     }
@@ -92,7 +92,7 @@ double Moisture::getScaledMoisture() const
 
 void Moisture::setScaledMoisture(double moisture)
 {
-    if((moisture <= 1) && (moisture != moisture_)) {
+    if((moisture <= 1) && (moisture >= 0) && (moisture != moisture_)) {
         moisture_ = moisture;
         emit moistureChanged(moisture_);
     }
@@ -119,7 +119,7 @@ float Distance::getDistance() const
 
 void Distance::setDistance(float distance)
 {
-    if(distance != distance_) {
+    if((distance <= 1) && (distance >= -1) && (distance != distance_) ) {
     distance_ = distance;
     emit distanceChanged(distance_);
     }

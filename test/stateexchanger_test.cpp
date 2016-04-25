@@ -20,6 +20,7 @@ protected:
         dbus_brightness_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.brightness", QDBusConnection::sessionBus());
         dbus_moisture_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.moisture", QDBusConnection::sessionBus());
         dbus_warning_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.warning", QDBusConnection::sessionBus());
+        dbus_distance_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.distance", QDBusConnection::sessionBus());
         if (!QDBusConnection::sessionBus().isConnected()) {
             fprintf(stderr, "Cannot connect to the D-Bus session bus.\n");
             exit(1);
@@ -33,6 +34,7 @@ protected:
     std::shared_ptr<QDBusInterface> dbus_brightness_;
     std::shared_ptr<QDBusInterface> dbus_moisture_;
     std::shared_ptr<QDBusInterface> dbus_warning_;
+    std::shared_ptr<QDBusInterface> dbus_distance_;
 };
 
 TEST_F(StateExchangerTest, can_get_and_set_luminosity) {
@@ -40,6 +42,16 @@ TEST_F(StateExchangerTest, can_get_and_set_luminosity) {
 
     dbus_luminosity_->setProperty("scaled", 0.5);
     EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(dbus_luminosity_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_luminosity_->setProperty("scaled", -0.1);
+    EXPECT_EQ(spy.count(),0);
+    EXPECT_EQ(dbus_luminosity_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_luminosity_->setProperty("scaled", 1.1);
+    EXPECT_EQ(spy.count(),0);
     EXPECT_EQ(dbus_luminosity_->property("scaled"), 0.5);
 }
 
@@ -49,6 +61,16 @@ TEST_F(StateExchangerTest, can_get_and_set_brightness) {
     dbus_brightness_->setProperty("scaled", 0.5);
     EXPECT_EQ(spy.count(),1);
     EXPECT_EQ(dbus_brightness_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_brightness_->setProperty("scaled", -0.1);
+    EXPECT_EQ(spy.count(),0);
+    EXPECT_EQ(dbus_brightness_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_brightness_->setProperty("scaled", 1.1);
+    EXPECT_EQ(spy.count(),0);
+    EXPECT_EQ(dbus_brightness_->property("scaled"), 0.5);
 }
 
 TEST_F(StateExchangerTest, can_get_and_set_moisture) {
@@ -56,6 +78,16 @@ TEST_F(StateExchangerTest, can_get_and_set_moisture) {
 
     dbus_moisture_->setProperty("scaled", 0.5);
     EXPECT_EQ(spy.count(),1);
+    EXPECT_EQ(dbus_moisture_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_moisture_->setProperty("scaled", -0.1);
+    EXPECT_EQ(spy.count(),0);
+    EXPECT_EQ(dbus_moisture_->property("scaled"), 0.5);
+
+    spy.clear();
+    dbus_moisture_->setProperty("scaled", 1.1);
+    EXPECT_EQ(spy.count(),0);
     EXPECT_EQ(dbus_moisture_->property("scaled"), 0.5);
 }
 
@@ -65,4 +97,22 @@ TEST_F(StateExchangerTest, can_get_and_set_warning) {
     dbus_warning_->setProperty("phrase", "This is a test");
     EXPECT_EQ(spy.count(),1);
     EXPECT_EQ(dbus_warning_->property("phrase"), "This is a test");
+}
+
+TEST_F(StateExchangerTest, can_get_and_set_distance) {
+    QSignalSpy spy(stateexchanger_->distance().get(), SIGNAL(distanceChanged(double)));
+
+    dbus_distance_->setProperty("scaled", 0.5);
+    EXPECT_EQ(1,spy.count());
+    EXPECT_EQ(0.5, dbus_distance_->property("scaled"));
+
+    spy.clear();
+    dbus_distance_->setProperty("scaled", -1.1);
+    EXPECT_EQ(0,spy.count());
+    EXPECT_EQ(0.5, dbus_distance_->property("scaled"));
+
+    spy.clear();
+    dbus_distance_->setProperty("scaled", 1.1);
+    EXPECT_EQ(0,spy.count());
+    EXPECT_EQ( 0.5, dbus_distance_->property("scaled"));
 }

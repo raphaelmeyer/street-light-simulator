@@ -27,7 +27,7 @@ class Brightness : public DBusObject
     ///Returns the scaled brightness (from 0-1.0)
     double getScaledBrightness() const;
     ///Sets the scaled brightness (from 0-1.0)
-    void setScaledBrightness(double brightness);
+    Q_NOREPLY void setScaledBrightness(double brightness);
 
 signals:
     ///Signals that the brightness has changed
@@ -52,7 +52,7 @@ class Luminosity : public DBusObject
     ///Returns the scaled luminosity of our lamp (0-1.0)
     double getScaledLuminosity() const;
     ///Sets the scaled luminosity of our lamp (0-1.0)
-    void setScaledLuminosity(double luminosity);
+    Q_NOREPLY void setScaledLuminosity(double luminosity);
 
 signals:
     ///Signals that the luminosity has changed
@@ -77,7 +77,7 @@ class Moisture : public DBusObject
     ///Returns the scaled moisture of our lamp (0-1.0)
     double getScaledMoisture() const;
     ///Sets the scaled moisture of our lamp (0-1.0)
-    void setScaledMoisture(double moisture);
+    Q_NOREPLY void setScaledMoisture(double moisture);
 
 signals:
     ///Signals that the moisture has changed
@@ -102,7 +102,7 @@ class Warning : public DBusObject
     ///Returns the warning of our lamp 
     QString getWarning() const;
     ///Sets the warning of our lamp 
-    void setWarning(QString Warning);
+    Q_NOREPLY void setWarning(QString Warning);
 
 signals:
     ///Signals that the warning phrase has changed
@@ -126,7 +126,7 @@ class Proximity : public DBusObject
     ///Returns the proximity of our lamp
     float getProximity() const;
     ///Sets the proximity of our lamp
-    void setProximity(float proximity);
+    Q_NOREPLY void setProximity(float proximity);
 
 signals:
     ///Signals that the proximity phrase has changed

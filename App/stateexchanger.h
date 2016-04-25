@@ -118,7 +118,7 @@ class Distance : public DBusObject
     ///Define the interface
     Q_CLASSINFO("D-Bus Interface", "ch.bbv.distance")
     /// The phrase which the sign will hold
-    Q_PROPERTY(double distance READ getDistance WRITE setDistance NOTIFY distanceChanged())
+    Q_PROPERTY(double scaled READ getDistance WRITE setDistance NOTIFY distanceChanged())
   public:
     ///Constructor
     Distance(QObject *application) : DBusObject(application) {}
@@ -133,7 +133,7 @@ signals:
     void distanceChanged(double distance);
 
   private:
-    float distance_; //!< The Distance at our sign of our simulated environment
+    float distance_ = 0; //!< The Distance at our sign of our simulated environment
 };
 
 ///Exchanges the state of the street-light over D-Bus

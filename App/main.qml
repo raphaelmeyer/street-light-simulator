@@ -158,6 +158,7 @@ ApplicationWindow {
                 id: car
                 sprites: [randomSprite, carSprite, traktorSprite, ufoSprite ]
                 groups: ["car"]
+                colorVariation: 1
             }
 
             Emitter {

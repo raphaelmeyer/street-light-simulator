@@ -333,8 +333,8 @@ ApplicationWindow {
             if(gui.car === undefined)
                 return
             var proximity =  Math.min(1,Math.max(-1,(gui.car.x-(streetImage.paintedWidth/2))/(streetImage.paintedWidth/2)))
-            cppProximity.proximity = proximity
-            //console.log("Car is now at "+cppProximity.proximity)
+            cppProximity.scaled = proximity
+            //console.log("Car is now at "+cppProximity.scaled)
         }
 
         function newCar(car) {

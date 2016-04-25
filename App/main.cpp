@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     {
         QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculateCelestialPositions()));
         QObject::connect(timer.get(),SIGNAL(timeout()), world, SLOT(calculateBrightness()));
-        QObject::connect(fastTimer.get(),SIGNAL(timeout()), world, SLOT(updateCarDistance()));
+        QObject::connect(fastTimer.get(),SIGNAL(timeout()), world, SLOT(updateCarProximity()));
        // QObject::connect(carSimulator, SIGNAL(carApproaching()),world, SLOT(simulateCar()));
     }
     else

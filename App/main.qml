@@ -96,46 +96,6 @@ ApplicationWindow {
             Behavior on anchors.horizontalCenterOffset  {NumberAnimation { duration: 1000 } }
             Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 1000 } }
         }
-
-        /*ParticleSystem {
-            id: rainParticles
-            anchors.fill: streetImage
-            z: 1
-            ImageParticle {
-                id: raindrop
-                source: "raindrop"
-                alphaVariation: 0.8
-                rotation: -90
-                autoRotation: true
-            }
-            Emitter {
-                id: rainEmitter
-                enabled: false
-                x: (gui.width-streetImage.paintedWidth)/2-400*scalingFactor
-                y: 0
-                width: streetImage.paintedWidth+400*scalingFactor
-                emitRate: 100
-                lifeSpan: 10000
-                size: 20*scalingFactor
-                sizeVariation: 10*scalingFactor
-                velocity: PointDirection { x: 100*scalingFactor; y: 150*scalingFactor; yVariation: 50*scalingFactor}
-                acceleration: PointDirection {y: 150*scalingFactor; yVariation: 100*scalingFactor}
-            }
-            Connections {
-                target: cppRain
-                onRainChanged: {
-                    if(cppRain.rain==true) {
-                        rainEmitter.enabled = true
-                        cppMoisture.scaled = 1.0;
-                    }
-                    else {
-                        rainEmitter.enabled = false
-                        cppMoisture.scaled = 0.0
-                    }
-                }
-            }
-        }*/
-
         ParticleSystem {
             id: carParticles
             anchors.fill: streetImage

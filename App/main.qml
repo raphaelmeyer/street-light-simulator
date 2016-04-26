@@ -28,20 +28,17 @@ ApplicationWindow {
             anchors.fill: parent
             source: "strasse_tag"
             fillMode: Image.PreserveAspectFit
-            //fillMode: Image.Stretch
-
-            Connections {
-                target: cppDay
-                onDaytimeChanged: {
-                    if(cppDay.daytime === DaySimulator.DAY) {
-                        streetImage.source = "strasse_tag"
-                    }
-                    else {
-                        streetImage.source = "strasse_nacht"
-                    }
-                }
-            }
         }
+
+        Image {
+            opacity: 0
+            id: streetImageNight
+            anchors.fill: parent
+            source: "strasse_nacht"
+            fillMode: Image.PreserveAspectFit
+            Behavior on opacity { NumberAnimation { duration: 3000 } }
+        }
+
         Image{
             id: sign
             source: cppWarning.phrase === "" ? "sign_inactive" : "sign_active"
@@ -302,5 +299,16 @@ ApplicationWindow {
         function newCar(car) {
             gui.car = car
         }
+        Connections {
+                        target: cppDay
+                        onDaytimeChanged: {
+                            if(cppDay.daytime === DaySimulator.DAY) {
+                                streetImageNight.opacity = 0
+                            }
+                            else {
+                                streetImageNight.opacity = 1
+                            }
+                        }
+                    }
     }
 }

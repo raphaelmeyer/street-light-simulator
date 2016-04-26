@@ -34,7 +34,7 @@ HEADERS += \
 ../App/stateexchanger.h \
 ../App/eventsimulator.h \
 ../App/rainsimulator.h \
-dbusobject.h
+../App/dbusobject.h
 
 
 #include(deployment.pri)

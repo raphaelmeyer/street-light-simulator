@@ -67,6 +67,7 @@ ApplicationWindow {
             source: "light"
             opacity: cppLuminosity.scaled
             fillMode: Image.PreserveAspectFit
+            z: 1
         }
         Image {
             id: sun

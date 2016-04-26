@@ -137,7 +137,7 @@ ApplicationWindow {
                 frameX: 0
                 frameWidth: 600
                 frameHeight: 600
-                                frameDuration: 20000
+                frameDuration: 20000
                 frameCount: 1
             }
             Sprite {
@@ -168,8 +168,8 @@ ApplicationWindow {
                 y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-200*scalingFactor
                 //Just one car at a time
                 emitRate: 1/(streetImage.paintedWidth/carVelocity)
-                maximumEmitted: 1
-                lifeSpan: (streetImage.paintedWidth/carVelocity)*1000//15000
+                //maximumEmitted: 1
+                lifeSpan: (streetImage.paintedWidth/carVelocity)*1000+1000//15000
                 velocity: PointDirection { x: -carRight.carVelocity}
 
                 size: 300*scalingFactor

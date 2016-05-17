@@ -45,17 +45,22 @@ ApplicationWindow {
             width: 72*scalingFactor
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: streetImage.verticalCenter
+            anchors.verticalCenterOffset: 120*scalingFactor
             anchors.horizontalCenter: streetImage.horizontalCenter
-            anchors.horizontalCenterOffset: 80*scalingFactor
+            //anchors.horizontalCenterOffset: 80*scalingFactor
             Label {
                 anchors.fill: parent
-                anchors.topMargin: 20
+                anchors.topMargin: 14*scalingFactor
+                anchors.bottomMargin: 14*scalingFactor
                 text: cppWarning.phrase
                 color: "yellow"
                 maximumLineCount: 6
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 elide: Text.ElideRight
                 horizontalAlignment: Text.AlignHCenter
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 2
+                font.pixelSize: 20
             }
         }
         Image {
@@ -100,13 +105,12 @@ ApplicationWindow {
             ImageParticle {
                 id: smokeParticle
                 source: "smoke"
-                //system: particles
                 groups: ["smoke"]
                 rotationVariation: 180
             }
             Sprite {
                 id: randomSprite
-                frameDuration: 1
+                frameDuration: 0
                 name: "randomSprite"
                 source: "car"
                 frameY: 1
@@ -165,11 +169,11 @@ ApplicationWindow {
                 property int carVelocity: 200*scalingFactor
                 height: 1
                 x: (gui.width-streetImage.paintedWidth)/2+streetImage.paintedWidth
-                y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-200*scalingFactor
-                //Just one car at a time
+                y: (gui.height-streetImage.paintedHeight)/2+streetImage.paintedHeight-250*scalingFactor
+                //Just one car at a time on the screen
                 emitRate: 1/(streetImage.paintedWidth/carVelocity)
                 //maximumEmitted: 1
-                lifeSpan: (streetImage.paintedWidth/carVelocity)*1000+1000//15000
+                lifeSpan: (streetImage.paintedWidth/carVelocity)*1000+1000
                 velocity: PointDirection { x: -carRight.carVelocity}
 
                 size: 300*scalingFactor
@@ -184,9 +188,10 @@ ApplicationWindow {
                 }
             }
 
+            //simulate an uneven street, car bouncing up and down
             Wander {
                 yVariance: 20*scalingFactor;
-                pace: 500;
+                pace: 1000;
                 groups: ["car"]
             }
             TrailEmitter {

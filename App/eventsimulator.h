@@ -17,7 +17,8 @@
 #include <QObject>
 #include <cstdint>
 #include <memory>
-#include<QTimer>
+#include <random>
+#include <QTimer>
 
 ///Simulates events in a cycle with some randomness
 class EventSimulator : public QObject

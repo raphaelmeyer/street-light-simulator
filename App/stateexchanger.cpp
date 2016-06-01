@@ -1,6 +1,6 @@
 #include "stateexchanger.h"
 
-StateExchanger::StateExchanger(QObject *parent) : QObject(parent)
+StateExchanger::StateExchanger(QString serviceName, QObject *parent) : QObject(parent), serviceName_(serviceName)
 {
     if (!QDBusConnection::sessionBus().isConnected()) {
         fprintf(stderr, "Cannot connect to the D-Bus session bus.\n");
@@ -9,7 +9,7 @@ StateExchanger::StateExchanger(QObject *parent) : QObject(parent)
 
 StateExchanger::~StateExchanger()
 {
-    QDBusConnection::sessionBus().unregisterService(SERVICE_NAME);
+    QDBusConnection::sessionBus().unregisterService(serviceName_);
 }
 
 bool StateExchanger::initialize()
@@ -24,9 +24,9 @@ bool StateExchanger::initialize()
         throw std::runtime_error("Could not create a D-Bus object");
     }
 
-    if(!QDBusConnection::sessionBus().registerService(SERVICE_NAME))
+    if(!QDBusConnection::sessionBus().registerService(serviceName_))
     {
-        qDebug() << "Could not register service";
+        qDebug() << "Could not register service: " + serviceName_;
         return false;
     }
     QDBusConnection::sessionBus().registerObject(PATH_NAME, this);

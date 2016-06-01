@@ -14,7 +14,7 @@ class StateExchangerTest : public testing::Test {
     //public:
 protected:
     virtual void SetUp() {
-        stateexchanger_ = std::make_shared<StateExchanger>();
+        stateexchanger_ = std::make_shared<StateExchanger>(SERVICE_NAME);
         EXPECT_TRUE(stateexchanger_->initialize());
         dbus_luminosity_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.luminosity", QDBusConnection::sessionBus());
         dbus_brightness_ = std::make_shared<QDBusInterface>(SERVICE_NAME, PATH_NAME, "ch.bbv.brightness", QDBusConnection::sessionBus());

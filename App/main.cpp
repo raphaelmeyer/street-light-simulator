@@ -7,14 +7,30 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
+static QString getServiceName(const QStringList &arguments)
+{
+  QCommandLineParser parser;
+
+  parser.addHelpOption();
+
+  const QString defaultServiceName{"ch.bbv.streetlight"};
+  QCommandLineOption serviceName{"service", "register with the provided service name instead of " + defaultServiceName, "name", defaultServiceName};
+  parser.addOption(serviceName);
+
+  parser.process(arguments);
+
+  return parser.value(serviceName);
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    const auto ServiceName = getServiceName(app.arguments());
     QQmlApplicationEngine engine;
 
     qmlRegisterType<DaySimulator>("com.bbv.StreetLightSimulator", 1, 0, "DaySimulator");
 
-    StateExchanger stateexchanger;
+    StateExchanger stateexchanger(ServiceName);
     if(!stateexchanger.initialize())
         qWarning() << "Could not initialize D-Bus connection";
 

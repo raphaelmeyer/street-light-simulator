@@ -9,7 +9,6 @@
 #include <QString>
 #include <memory>
 
-#define SERVICE_NAME "ch.bbv.streetlight"
 #define PATH_NAME "/ch/bbv/streetlight"
 
 /// Defines the "measured" sensor brightness of our street-light 
@@ -142,7 +141,7 @@ class StateExchanger : public QObject
   Q_OBJECT
   public:
     ///Constructor
-    explicit StateExchanger(QObject *parent = nullptr);
+    explicit StateExchanger(QString serviceName, QObject *parent = nullptr);
     ///Destructor
     ~StateExchanger();
 
@@ -167,6 +166,7 @@ class StateExchanger : public QObject
     std::shared_ptr<Moisture> moisture_; //!< Pointer to the luminosity instance of this lamp
     std::shared_ptr<Warning> warning_; //!< Pointer to the warning instance of this lamp
     std::shared_ptr<Proximity> proximity_; //!< Pointer to the proximity instance of this lamp
+    QString serviceName_; //!< Name of this DBus service
 };
 
 #endif // STATEEXCHANGER_H

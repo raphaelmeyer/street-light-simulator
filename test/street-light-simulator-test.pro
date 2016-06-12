@@ -29,8 +29,7 @@ SOURCES += \
   eventsimulator_test.cpp \
   Main_TestAll.cpp \
   rainsimulator_test.cpp \
-  ../googletest/googletest/src/gtest-all.cc \
-  ../googletest/googletest/src/gtest_main.cc
+  ../googletest/googletest/src/gtest-all.cc
 
 HEADERS += \
   ../App/daysimulator.h \

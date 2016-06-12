@@ -16,8 +16,8 @@ CONFIG += c++14
 CONFIG += coverage
 LIBS += -lgcov --coverage
 
-QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
+#QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
+#QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
 
 # Input
 SOURCES += main.cpp \ 

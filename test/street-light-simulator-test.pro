@@ -12,33 +12,36 @@ CONFIG += c++14
 QMAKE_CXXFLAGS += -fprofile-arcs -ftest-coverage -O0
 QMAKE_LFLAGS += -fprofile-arcs -ftest-coverage -O0 -lgcov --coverage
 
-INCLUDEPATH += ../test/ \
-    ../App/
+INCLUDEPATH += \
+  ../test/ \
+  ../App/ \
+  ../googletest/googletest \
+  ../googletest/googletest/include
 
 SOURCES += \
- ../App/daysimulator.cpp \
-../App/stateexchanger.cpp \
-    ../App/dbusobject.cpp  \
-    ../App/eventsimulator.cpp  \
-    ../App/rainsimulator.cpp  \
-    daysimulator_test.cpp \
-    stateexchanger_test.cpp \
-    eventsimulator_test.cpp \
-    Main_TestAll.cpp \
-    rainsimulator_test.cpp
-
-
+  ../App/daysimulator.cpp \
+  ../App/stateexchanger.cpp \
+  ../App/dbusobject.cpp  \
+  ../App/eventsimulator.cpp  \
+  ../App/rainsimulator.cpp  \
+  daysimulator_test.cpp \
+  stateexchanger_test.cpp \
+  eventsimulator_test.cpp \
+  Main_TestAll.cpp \
+  rainsimulator_test.cpp \
+  ../googletest/googletest/src/gtest-all.cc \
+  ../googletest/googletest/src/gtest_main.cc
 
 HEADERS += \
-../App/daysimulator.h \
-../App/stateexchanger.h \
-../App/eventsimulator.h \
-../App/rainsimulator.h \
-../App/dbusobject.h
-
+  ../App/daysimulator.h \
+  ../App/stateexchanger.h \
+  ../App/eventsimulator.h \
+  ../App/rainsimulator.h \
+  ../App/dbusobject.h
 
 #include(deployment.pri)
 #qtcAddDeployment()
 
+LIBS += -pthread -lgcov --coverage
 
-LIBS += -lgtest -pthread -lgtest_main -lgcov --coverage
+
